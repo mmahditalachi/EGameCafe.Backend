@@ -1,0 +1,30 @@
+﻿<Project Sdk="Microsoft.NET.Sdk">
+
+  <PropertyGroup>
+    <TargetFramework>netcoreapp3.1</TargetFramework>
+  </PropertyGroup>
+
+  <ItemGroup>
+    <Compile Remove="Migrations\20201029094154_InitialDb.cs" />
+    <Compile Remove="Migrations\20201029094154_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20201029094359_InitialDb.cs" />
+    <Compile Remove="Migrations\20201029094359_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20201029102750_AlterAspNetUsersBirthdate.cs" />
+    <Compile Remove="Migrations\20201029102750_AlterAspNetUsersBirthdate.Designer.cs" />
+    <Compile Remove="Migrations\20201029124707_InitialDb.cs" />
+    <Compile Remove="Migrations\20201029124707_InitialDb.Designer.cs" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.9" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.6" />
+    <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
+    <PackageReference Include="MailKit" Version="2.8.0" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\EGameCafe.Application\EGameCafe.Application.csproj" />
+  </ItemGroup>
+
+</Project>
