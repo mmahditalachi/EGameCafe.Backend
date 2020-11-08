@@ -2,6 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
+    <RootNamespace>EGameCafe.Infrastructure</RootNamespace>
+    <AssemblyName>EGameCafe.Infrastructure</AssemblyName>
   </PropertyGroup>
 
   <ItemGroup>
@@ -13,6 +15,8 @@
     <Compile Remove="Migrations\20201029102750_AlterAspNetUsersBirthdate.Designer.cs" />
     <Compile Remove="Migrations\20201029124707_InitialDb.cs" />
     <Compile Remove="Migrations\20201029124707_InitialDb.Designer.cs" />
+    <Compile Remove="Migrations\20201102161916_CreateGroups.cs" />
+    <Compile Remove="Migrations\20201102161916_CreateGroups.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

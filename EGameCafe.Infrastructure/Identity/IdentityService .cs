@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
 using System.Collections.Generic;
@@ -25,30 +26,31 @@ namespace EGameCafe.Infrastructure.Identity
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IConfiguration _configuration;
         private readonly IApplicationDbContext _applicationDbContext;
         private readonly IMobileSenders _mobileSenders;
         private readonly IEmailSender _emailSender;
         private readonly IMemoryCache _memoryCache;
+        private readonly IOptions<JWTKeys> _jwtKeys;
 
-        public IdentityService(UserManager<ApplicationUser> userManager,
-            SignInManager<ApplicationUser> signInManager,
-            IConfiguration configuration,
-            IApplicationDbContext applicationDbContext,
+        public IdentityService(
+            UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
+            SignInManager<ApplicationUser> signInManager,
+            IApplicationDbContext applicationDbContext,
             IMobileSenders mobileSenders,
             IEmailSender emailSender,
-            IMemoryCache memoryCache
+            IMemoryCache memoryCache,
+            IOptions<JWTKeys> jwtKeys
             )
         {
             _userManager = userManager;
-            _signInManager = signInManager;
-            _configuration = configuration;
-            _applicationDbContext = applicationDbContext;
             _roleManager = roleManager;
+            _signInManager = signInManager;
+            _applicationDbContext = applicationDbContext;
             _mobileSenders = mobileSenders;
             _emailSender = emailSender;
             _memoryCache = memoryCache;
+            _jwtKeys = jwtKeys;
         }
 
         public async Task<Result> CreateUserAsync(RegisterModel model)
@@ -344,16 +346,15 @@ namespace EGameCafe.Infrastructure.Identity
         public async Task<AuthenticationResult> GenerateToken(ApplicationUser user, DateTime date = default)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:SigningKey"]);
-            var audience = _configuration["Jwt:Site"];
-            int expiryInMinutes = Convert.ToInt32(_configuration["Jwt:ExpiryInMinutes"]);
+            var key = Encoding.UTF8.GetBytes(_jwtKeys.Value.SigningKey);
+            var audience = _jwtKeys.Value.Site;
+            int expiryInMinutes = Convert.ToInt32(_jwtKeys.Value.ExpiryInMinutes);
 
             var claims = new List<Claim>
             {
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                //new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim("id", user.Id),
+                new Claim(JwtRegisteredClaimNames.NameId, user.Id),
                 new Claim(JwtRegisteredClaimNames.FamilyName, user.FullName())
             };
 
@@ -415,14 +416,14 @@ namespace EGameCafe.Infrastructure.Identity
         {
             var tokenHandler = new JwtSecurityTokenHandler();
 
-            var key = Encoding.UTF8.GetBytes(_configuration["Jwt:SigningKey"]);
+            var key = Encoding.UTF8.GetBytes(_jwtKeys.Value.SigningKey);
 
             var tokenValidationParameters = new TokenValidationParameters
             {
                 ValidateIssuerSigningKey = true,
                 IssuerSigningKey = new SymmetricSecurityKey(key),
-                ValidAudience = _configuration["Jwt:Site"],
-                ValidIssuer = _configuration["Jwt:Site"],
+                ValidAudience = _jwtKeys.Value.Site,
+                ValidIssuer = _jwtKeys.Value.Site,
                 ValidateIssuer = true,
                 ValidateAudience = true,
                 ValidateLifetime = false

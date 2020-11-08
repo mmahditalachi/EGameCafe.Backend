@@ -4,6 +4,8 @@ using System.Threading;
 using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
+using ValidationException = EGameCafe.Application.Common.Exceptions.ValidationException;
+
 
 namespace EGameCafe.Application.Common.Behaviours
 {

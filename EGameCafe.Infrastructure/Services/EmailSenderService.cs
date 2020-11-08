@@ -17,13 +17,11 @@ namespace Laboratory.Infrastructure.Services
     public class EmailSenderService : IEmailSender
     {
         private readonly EmailSettings _emailSettings;
-        private readonly IHostingEnvironment _env;
         private readonly Logger<EmailSenderService> _logger;
 
-        public EmailSenderService(IOptions<EmailSettings> emailSettings,IHostingEnvironment env)
+        public EmailSenderService(IOptions<EmailSettings> emailSettings)
         {
             _emailSettings = emailSettings.Value;
-            _env = env;
         }
 
         public async Task<Result> SendEmailAsync(string email, string subject, string message)
@@ -47,16 +45,16 @@ namespace Laboratory.Infrastructure.Services
                     // For demo-purposes, accept all SSL certificates (in case the server supports STARTTLS)
                     client.ServerCertificateValidationCallback = (s, c, h, e) => true;
 
-                    if (_env.IsDevelopment())
-                    {
-                        // The third parameter is useSSL (true if the client should make an SSL-wrapped
-                        // connection to the server; otherwise, false).
-                        await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, true);
-                    }
-                    else
-                    {
-                        await client.ConnectAsync(_emailSettings.MailServer);
-                    }
+                    //if (_env.IsDevelopment())
+                    //{
+                    // The third parameter is useSSL (true if the client should make an SSL-wrapped
+                    // connection to the server; otherwise, false).
+                    await client.ConnectAsync(_emailSettings.MailServer, _emailSettings.MailPort, true);
+                    //}
+                    //else
+                    //{
+                    //    await client.ConnectAsync(_emailSettings.MailServer);
+                    //}
 
                     // Note: only needed if the SMTP server requires authentication
                     await client.AuthenticateAsync(_emailSettings.Sender, _emailSettings.Password);
@@ -67,8 +65,9 @@ namespace Laboratory.Infrastructure.Services
 
                     return Result.Success();
                 }
-                
-            }catch(Exception ex)
+
+            }
+            catch (Exception ex)
             {
                 _logger.LogError($"email not sent to {email} errors : {ex.Message}");
                 return Result.Failure("Email not sent", "ایمیل ارسال نشد");

@@ -44,7 +44,7 @@ namespace Application.IntegrationTests
 
             services.AddSingleton(Mock.Of<IWebHostEnvironment>(w =>
                 w.EnvironmentName == "Development" &&
-                w.ApplicationName == "CleanArchitecture.WebUI"));
+                w.ApplicationName == "EGameCafe.Server"));
 
             services.AddLogging();
 
@@ -91,7 +91,7 @@ namespace Application.IntegrationTests
 
         public static async Task<string> RunAsDefaultUserAsync()
         {
-            return await RunAsUserAsync("test@local", "Testing1234!");
+            return await RunAsUserAsync("mohi", "Testing1234!");
         }
 
         public static async Task<string> RunAsUserAsync(string userName, string password)
@@ -100,9 +100,13 @@ namespace Application.IntegrationTests
 
             var userManager = scope.ServiceProvider.GetService<UserManager<ApplicationUser>>();
 
-            var user = new ApplicationUser { UserName = userName, Email = userName };
+            var user = new ApplicationUser { UserName = userName, Email = "test@test.com", FirstName = "mohammad", LastName = "talachi", BirthDate = new DateTime(1999, 11, 24) };
 
             var result = await userManager.CreateAsync(user, password);
+
+            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
+
+            await userManager.ConfirmEmailAsync(user, token);
 
             if (result.Succeeded)
             {
@@ -114,6 +118,24 @@ namespace Application.IntegrationTests
             var errors = string.Join(Environment.NewLine, result.ToApplicationResult());
 
             throw new Exception($"Unable to create {userName}.{Environment.NewLine}{errors}");
+        }
+
+        public static async Task<string> GenerateRandomId()
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var generator = scope.ServiceProvider.GetService<IIdGenerator>();
+
+            return await generator.BasicIdGenerator(GetDateTime());
+        }
+
+        public static IDateTime GetDateTime()
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var datetime = scope.ServiceProvider.GetService<IDateTime>();
+
+            return datetime;
         }
 
         public static async Task ResetState()

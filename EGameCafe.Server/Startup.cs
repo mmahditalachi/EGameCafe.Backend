@@ -1,24 +1,19 @@
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Threading.Tasks;
 using EGameCafe.Application;
 using EGameCafe.Application.Common.Interfaces;
 using EGameCafe.Infrastructure;
-using EGameCafe.Infrastructure.Identity;
-using EGameCafe.Infrastructure.Persistence;
 using EGameCafe.Server.Common.Options;
 using EGameCafe.Server.Filters;
+using EGameCafe.Server.Hubs;
 using EGameCafe.Server.Services;
 using FluentValidation.AspNetCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.HttpsPolicy;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 
 namespace EGameCafe.Server
@@ -39,7 +34,7 @@ namespace EGameCafe.Server
 
             services.AddInfrastructure(Configuration);
 
-            services.AddScoped<IIdentityService, IdentityService>();
+            //services.AddScoped<IIdentityService, IdentityService>();
 
             services.AddSingleton<ICurrentUserService, CurrentUserService>();
 
@@ -47,6 +42,12 @@ namespace EGameCafe.Server
 
             //services.AddHealthChecks()
             //    .AddDbContextCheck<ApplicationDbContext>();
+
+
+            services.AddApiVersioning(o=>{
+                o.AssumeDefaultVersionWhenUnspecified = true;
+                o.DefaultApiVersion = new ApiVersion(1, 0);
+            });
 
             services.AddControllersWithViews(options =>
                 options.Filters.Add(new ApiExceptionFilter()))
@@ -59,9 +60,16 @@ namespace EGameCafe.Server
                 options.SuppressModelStateInvalidFilter = true;
             });
 
+            services.AddSignalR();
+
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new OpenApiInfo { Title = "EGameCafe API", Version = "v1" });
+                x.SwaggerDoc("v1", new OpenApiInfo 
+                { 
+                    Title = "EGameCafe API",
+                    Version = "v1",
+                    Description= "API V1 description"
+                });
 
                 x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
                 {
@@ -82,6 +90,10 @@ namespace EGameCafe.Server
                         Type = ReferenceType.SecurityScheme
                     }}, new List<string>()}
                 });
+
+                x.ResolveConflictingActions(a=>a.First());
+                x.OperationFilter<RemoveVersionFromParameter>();
+                x.DocumentFilter<ReplaceVersionWithExactValueInPath>();
 
             });
         }
@@ -117,7 +129,10 @@ namespace EGameCafe.Server
             var swaggerOptions = new SwaggerOption();
             Configuration.GetSection(nameof(SwaggerOption)).Bind(swaggerOptions);
 
-            app.UseSwagger(option => { option.RouteTemplate = swaggerOptions.JsonRoute; });
+            app.UseSwagger(option => 
+            { 
+                option.RouteTemplate = swaggerOptions.JsonRoute;
+            });
             app.UseSwaggerUI(option =>
             {
                 option.SwaggerEndpoint(swaggerOptions.UiEndpoint, swaggerOptions.Description);
@@ -128,6 +143,7 @@ namespace EGameCafe.Server
                 endpoints.MapRazorPages();
                 endpoints.MapControllers();
                 endpoints.MapFallbackToFile("index.html");
+                endpoints.MapHub<ChatHub>("/chathub");
             });
         }
     }

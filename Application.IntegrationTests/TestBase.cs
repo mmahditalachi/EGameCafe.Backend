@@ -8,7 +8,7 @@ namespace Application.IntegrationTests
 {
     using static Testing;
 
-    class TestBase
+    public class TestBase
     {
         [SetUp]
         public async Task TestSetUp()

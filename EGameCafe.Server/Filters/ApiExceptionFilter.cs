@@ -74,7 +74,7 @@ namespace EGameCafe.Server.Filters
         {
             var exception = context.Exception as NotFoundException;
 
-            var details = Result.Failure(exception.Message, "یافت نشد",
+            var details = Result.Failure(exception.Message, "یافت نشد", "Failure",
                 "https://tools.ietf.org/html/rfc7231#section-6.5.4", 404, "NotFount");
         
             context.Result = new NotFoundObjectResult(details);

@@ -19,6 +19,57 @@ namespace EGameCafe.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("EGameCafe.Domain.Entities.GamingGroupMembers", b =>
+                {
+                    b.Property<string>("GroupMemberId")
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("GroupMemberId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("GroupMembers");
+                });
+
+            modelBuilder.Entity("EGameCafe.Domain.Entities.GamingGroups", b =>
+                {
+                    b.Property<string>("GamingGroupGroupId")
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("GroupName")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("GroupType")
+                        .HasColumnType("int");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("GamingGroupGroupId");
+
+                    b.ToTable("GamingGroups");
+                });
+
             modelBuilder.Entity("EGameCafe.Domain.Entities.OTP", b =>
                 {
                     b.Property<string>("Id")
@@ -289,6 +340,13 @@ namespace EGameCafe.Infrastructure.Migrations
                     b.HasKey("UserId", "LoginProvider", "Name");
 
                     b.ToTable("AspNetUserTokens");
+                });
+
+            modelBuilder.Entity("EGameCafe.Domain.Entities.GamingGroupMembers", b =>
+                {
+                    b.HasOne("EGameCafe.Domain.Entities.GamingGroups", "GamingGroup")
+                        .WithMany("GroupMembers")
+                        .HasForeignKey("GroupId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

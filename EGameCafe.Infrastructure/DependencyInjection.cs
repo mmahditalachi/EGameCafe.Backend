@@ -66,12 +66,14 @@ namespace EGameCafe.Infrastructure
             {
                 ValidateIssuer = true,
                 ValidateAudience = true,
-                ValidAudience = configuration["Jwt:Site"],
-                ValidIssuer = configuration["Jwt:Site"],
+                ValidAudience = configuration["JWTKeys:Site"],
+                ValidIssuer = configuration["JWTKeys:Site"],
                 ClockSkew = TimeSpan.Zero,
                 ValidateLifetime = true,
-                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["Jwt:SigningKey"]))
+                IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(configuration["JWTKeys:SigningKey"]))
             };
+
+            services.AddTransient<IIdentityService, IdentityService>();
 
             services.AddAuthentication(option=> {
 
@@ -96,7 +98,7 @@ namespace EGameCafe.Infrastructure
             });
 
             services.AddTransient<IDateTime, DateTimeService>();
-            services.AddTransient<IIdentityService, IdentityService>();
+            services.AddTransient<IIdGenerator, IdGeneratorService > ();
 
             return services;
         }
