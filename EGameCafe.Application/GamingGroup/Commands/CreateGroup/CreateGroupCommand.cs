@@ -13,6 +13,12 @@ namespace EGameCafe.Application.GamingGroup.Commands.CreateGroup
     {
         public string GroupName { get; set; }
         public GroupType GroupType { get; set; }
+
+        public CreateGroupCommand(string groupName, GroupType groupType)
+        {
+            GroupName = groupName;
+            GroupType = groupType;
+        }
     }
 
     public class Handler : IRequestHandler<CreateGroupCommand, Result>

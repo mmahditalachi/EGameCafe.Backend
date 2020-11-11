@@ -36,11 +36,7 @@ namespace Application.IntegrationTests.GamingGroup.Commands
         [Test]
         public async Task ShouldRemoveGroupList()
         {
-            var command = new CreateGroupCommand
-            {
-                GroupName = "gptest",
-                GroupType = GroupType.privateGroup
-            };
+            var command = new CreateGroupCommand("gptest",GroupType.privateGroup);
 
             var result = await SendAsync(command);
 

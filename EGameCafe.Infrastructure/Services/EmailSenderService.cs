@@ -17,7 +17,6 @@ namespace Laboratory.Infrastructure.Services
     public class EmailSenderService : IEmailSender
     {
         private readonly EmailSettings _emailSettings;
-        private readonly Logger<EmailSenderService> _logger;
 
         public EmailSenderService(IOptions<EmailSettings> emailSettings)
         {
@@ -32,7 +31,9 @@ namespace Laboratory.Infrastructure.Services
 
                 mimeMessage.From.Add(new MailboxAddress(_emailSettings.SenderName, _emailSettings.Sender));
 
-                mimeMessage.To.Add(new MailboxAddress(email));
+                var address = new MailboxAddress(email);
+
+                mimeMessage.To.Add(address);
 
                 mimeMessage.Subject = subject;
 
@@ -69,8 +70,7 @@ namespace Laboratory.Infrastructure.Services
             }
             catch (Exception ex)
             {
-                _logger.LogError($"email not sent to {email} errors : {ex.Message}");
-                return Result.Failure("Email not sent", "ایمیل ارسال نشد");
+                throw new Exception($"email not sent to {email} errors : {ex.Message}");
             }
         }
     }
