@@ -5,8 +5,6 @@
     <RootNamespace>EGameCafe.Server</RootNamespace>
     <AssemblyName>EGameCafe.Server</AssemblyName>
     <UserSecretsId>183d3085-d3f6-4617-a81b-39d8673d00d6</UserSecretsId>
-    <DockerDefaultTargetOS>Linux</DockerDefaultTargetOS>
-    <DockerComposeProjectPath>..\docker-compose.dcproj</DockerComposeProjectPath>
   </PropertyGroup>
 
   <ItemGroup>
