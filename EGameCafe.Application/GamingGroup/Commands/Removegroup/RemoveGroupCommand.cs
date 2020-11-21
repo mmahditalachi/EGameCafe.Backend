@@ -12,11 +12,6 @@ namespace EGameCafe.Application.GamingGroup.Commands.Removegroup
     public class RemoveGroupCommand : IRequest<Result>
     {
         public string GroupId { get; set; }
-
-        public RemoveGroupCommand(string groupId)
-        {
-            GroupId = groupId;
-        }
     }
 
     public class Handler : IRequestHandler<RemoveGroupCommand, Result>

@@ -24,6 +24,7 @@ namespace EGameCafe.Server.Filters
                 { typeof(NotFoundException), HandleNotFoundException },
                 { typeof(SMSException), HandleSMSException },
                 { typeof(RequestTimeoutException), HandleRequestTimeout },
+                { typeof(InvalidTokenException), HandleInvalidToken },
             };
         }
 
@@ -101,6 +102,20 @@ namespace EGameCafe.Server.Filters
             var exception = context.Exception as RequestTimeoutException;
 
             var details = Result.Failure("RequestTimeoutException", exception.Message);
+
+            context.Result = new ObjectResult(details)
+            {
+                StatusCode = StatusCodes.Status400BadRequest
+            };
+
+            context.ExceptionHandled = true;
+        }
+
+        private void HandleInvalidToken(ExceptionContext context)
+        {
+            var exception = context.Exception as InvalidTokenException;
+
+            var details = Result.Failure("InvalidTokenException", exception.Message);
 
             context.Result = new ObjectResult(details)
             {

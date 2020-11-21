@@ -7,16 +7,16 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EGameCafe.Application.GroupMember.Commands.LeaveGroup
+namespace EGameCafe.Application.GroupMember.Commands.KickUser
 {
-    public class LeaveGroupCommand : IRequest<Result>
+    public class KickUserCommand : IRequest<Result>
     {
         public string GroupId { get; set; }
         public string UserId { get; set; }
 
     }
 
-    public class Handler : IRequestHandler<LeaveGroupCommand, Result>
+    public class Handler : IRequestHandler<KickUserCommand, Result>
     {
         private readonly IApplicationDbContext _context;
         public Handler(IApplicationDbContext context)
@@ -24,7 +24,7 @@ namespace EGameCafe.Application.GroupMember.Commands.LeaveGroup
             _context = context;
         }
 
-        public async Task<Result> Handle(LeaveGroupCommand request, CancellationToken cancellationToken)
+        public async Task<Result> Handle(KickUserCommand request, CancellationToken cancellationToken)
         {
             var entity = await _context.GroupMembers.FirstOrDefaultAsync(e => e.UserId == request.UserId && e.GroupId == request.GroupId);
 
@@ -33,11 +33,13 @@ namespace EGameCafe.Application.GroupMember.Commands.LeaveGroup
                 throw new NotFoundException(nameof(GamingGroups), request.GroupId);
             }
 
-            _context.GroupMembers.Remove(entity);
+            entity.Block = true;
+
+            _context.GroupMembers.Update(entity);
 
             await _context.SaveChangesAsync(cancellationToken);
 
-            return Result.Success();
+            return Result.Success(entity.GroupMemberId);
         }
     }
 }

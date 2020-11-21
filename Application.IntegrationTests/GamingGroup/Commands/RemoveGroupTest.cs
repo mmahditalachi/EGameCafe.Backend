@@ -16,7 +16,7 @@ namespace Application.IntegrationTests.GamingGroup.Commands
         [Test]
         public void ShouldRequireValid64CharGroupId()
         {
-            var command = new RemoveGroupCommand("9");
+            var command = new RemoveGroupCommand { GroupId = "9" };
 
             FluentActions.Invoking(() =>
                 SendAsync(command)).Should().Throw<ValidationException>();
@@ -27,7 +27,7 @@ namespace Application.IntegrationTests.GamingGroup.Commands
         {
             var randomId = await GenerateRandomId();
 
-            var command = new RemoveGroupCommand(randomId);
+            var command = new RemoveGroupCommand{ GroupId = randomId };
 
             FluentActions.Invoking(() =>
                 SendAsync(command)).Should().Throw<NotFoundException>();
@@ -36,11 +36,11 @@ namespace Application.IntegrationTests.GamingGroup.Commands
         [Test]
         public async Task ShouldRemoveGroupList()
         {
-            var command = new CreateGroupCommand("gptest",GroupType.privateGroup);
+            var command = new CreateGroupCommand { GroupName = "gptest", GroupType = GroupType.privateGroup };
 
             var result = await SendAsync(command);
 
-            await SendAsync(new RemoveGroupCommand(result.Id));
+            await SendAsync(new RemoveGroupCommand { GroupId = result.Id });
           
             var list = await FindAsync<GamingGroups>(result.Id);
 

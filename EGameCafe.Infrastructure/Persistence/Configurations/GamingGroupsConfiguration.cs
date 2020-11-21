@@ -24,6 +24,9 @@ namespace EGameCafe.Infrastructure.Persistence.Configurations
 
             builder.Property(e => e.GroupType)
                 .IsRequired();
+
+            builder.Property(e => e.SharingLink)
+                .IsRequired();
         }
     }
 }

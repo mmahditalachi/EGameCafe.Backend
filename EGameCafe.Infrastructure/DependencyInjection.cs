@@ -1,4 +1,5 @@
 ﻿using EGameCafe.Application.Common.Interfaces;
+using EGameCafe.Application.Models.Identity;
 using EGameCafe.Infrastructure.Identity;
 using EGameCafe.Infrastructure.Persistence;
 using EGameCafe.Infrastructure.Services;
@@ -89,6 +90,8 @@ namespace EGameCafe.Infrastructure
                 });
 
             services.Configure<EmailSettings>(configuration.GetSection("EmailSettings"));
+
+            services.Configure<JWTKeys>(configuration.GetSection("JWTKeys"));
 
             services.AddTransient<IEmailSender, EmailSenderService>();
 
