@@ -13,11 +13,11 @@ COPY ["EGameCafe.Application/EGameCafe.Application.csproj", "EGameCafe.Applicati
 COPY ["EGameCafe.Domain/EGameCafe.Domain.csproj", "EGameCafe.Domain/"]
 RUN dotnet restore "EGameCafe.Server/EGameCafe.Server.csproj"
 COPY . .
-WORKDIR "/src/EGameCafe.Server"
-RUN dotnet build "EGameCafe.Server.csproj" -c Release -o /app/build
+WORKDIR "/src"
+RUN dotnet build "EGameCafe.sln" -c Release -o /app/build
 
 FROM build AS publish
-RUN dotnet publish "EGameCafe.Server.csproj" -c Release -o /app/publish
+RUN dotnet publish "EGameCafe.sln" -c Release -o /app/publish
 
 FROM base AS final
 WORKDIR /app
