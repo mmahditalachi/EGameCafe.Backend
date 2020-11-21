@@ -13,12 +13,6 @@ namespace EGameCafe.Application.GamingGroup.Commands.CreateGroup
     {
         public string GroupName { get; set; }
         public GroupType GroupType { get; set; }
-
-        public CreateGroupCommand(string groupName, GroupType groupType)
-        {
-            GroupName = groupName;
-            GroupType = groupType;
-        }
     }
 
     public class Handler : IRequestHandler<CreateGroupCommand, Result>
@@ -38,10 +32,13 @@ namespace EGameCafe.Application.GamingGroup.Commands.CreateGroup
         {
             try
             {
+                var sharingLink = await _idGenerator.SHA1hashGenerator(request.GroupName);
+
                 var entry = new GamingGroups() 
                 { 
                     GroupName = request.GroupName,
-                    GroupType = request.GroupType 
+                    GroupType = request.GroupType,
+                    SharingLink = sharingLink
                 };
 
                 entry.GamingGroupGroupId = await _idGenerator.BasicIdGenerator(_dateTime);

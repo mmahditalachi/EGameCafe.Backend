@@ -15,7 +15,6 @@ namespace EGameCafe.Application.Common.Interfaces
         DbSet<RefreshToken> RefreshTokens { get; set; }
         DbSet<GamingGroupMembers> GroupMembers { get; set; }
         DbSet<GamingGroups> GamingGroups { get; set; }
-
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

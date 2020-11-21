@@ -17,7 +17,8 @@ namespace Application.IntegrationTests.GamingGroup.Queries
             await AddAsync(new GamingGroups { 
                 GamingGroupGroupId = await GenerateRandomId(),
                 GroupName = "gpTest",
-                GroupType = GroupType.publicGroup
+                GroupType = GroupType.publicGroup,
+                SharingLink = await GenerateSHA1Hash()
             });
 
             var query = new GetAllGroupsQuery(0, 10, "");

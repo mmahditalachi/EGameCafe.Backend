@@ -18,12 +18,14 @@ namespace Application.IntegrationTests.GamingGroup.Queries
         public async Task ShouldReturnGroupById()
         {
             var groupId = await GenerateRandomId();
+            var sharingLink = await GenerateSHA1Hash();
 
             var item = new GamingGroups
             {
                 GamingGroupGroupId = groupId,
                 GroupName = "gpTest",
-                GroupType = GroupType.publicGroup
+                GroupType = GroupType.publicGroup,
+                SharingLink = sharingLink
             };
 
             await AddAsync(item);

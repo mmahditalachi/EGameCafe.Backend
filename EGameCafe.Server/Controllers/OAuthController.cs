@@ -101,5 +101,13 @@ namespace EGameCafe.Server.Controllers
             var result = await _identityService.RegisterUserInfo(model);
             return result.Succeeded ? (IActionResult)Ok(result) : BadRequest(result);
         }
+
+        [HttpGet("UserProfile")]
+        public async Task<IActionResult> UserProfile(string userId)
+        {
+            var result = await _identityService.UserProfile(userId);
+            return result != null ? (IActionResult)Ok(result) : BadRequest(new { error = "user not found" });
+        }
+
     }
 }

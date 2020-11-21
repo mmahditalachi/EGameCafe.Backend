@@ -32,7 +32,7 @@ namespace Application.UnitTests.Common.Behaviours
 
             var requestLogger = new LoggingBehaviour<CreateGroupCommand>(_logger.Object, _currentUserService.Object, _identityService.Object);
 
-            await requestLogger.Process(new CreateGroupCommand("gp1Test", GroupType.publicGroup), new CancellationToken());
+            await requestLogger.Process(new CreateGroupCommand { GroupName = "gp1Test", GroupType = GroupType.publicGroup }, new CancellationToken());
 
             _identityService.Verify(i => i.GetUserNameAsync(It.IsAny<string>()), Times.Once);
         }
@@ -42,7 +42,7 @@ namespace Application.UnitTests.Common.Behaviours
         {
             var requestLogger = new LoggingBehaviour<CreateGroupCommand>(_logger.Object, _currentUserService.Object, _identityService.Object);
 
-            await requestLogger.Process(new CreateGroupCommand("gp1Test", GroupType.publicGroup), new CancellationToken());
+            await requestLogger.Process(new CreateGroupCommand { GroupName = "gp1Test", GroupType = GroupType.publicGroup }, new CancellationToken());
 
             _identityService.Verify(i => i.GetUserNameAsync(null), Times.Never);
         }

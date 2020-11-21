@@ -129,6 +129,15 @@ namespace Application.IntegrationTests
             return await generator.BasicIdGenerator(GetDateTime());
         }
 
+        public static async Task<string> GenerateSHA1Hash()
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var generator = scope.ServiceProvider.GetService<IIdGenerator>();
+
+            return await generator.SHA1hashGenerator(GenerateRandomString(5));
+        }
+
         public static IDateTime GetDateTime()
         {
             using var scope = _scopeFactory.CreateScope();
@@ -164,6 +173,15 @@ namespace Application.IntegrationTests
             context.Add(entity);
 
             await context.SaveChangesAsync();
+        }
+
+        public static string GenerateRandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+
+            Random random = new Random();
+
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
         }
 
         [OneTimeTearDown]

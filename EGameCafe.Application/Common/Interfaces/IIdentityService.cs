@@ -24,5 +24,7 @@ namespace EGameCafe.Application.Common.Interfaces
         Task<Result> EmailConfirmation(EmailConfirmationModel model);
         Task<Result> ForgotPasswordOTPConfirmation(OTPConfirmationModel model);
         Task<Result> RegisterUserInfo(RegisterUserInfoModel userInfo);
+        Task<UserProfileModel> UserProfile(string userId);
+
     }
 }

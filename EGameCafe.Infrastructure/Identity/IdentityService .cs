@@ -1,4 +1,5 @@
-﻿using EGameCafe.Application.Common.Interfaces;
+﻿using EGameCafe.Application.Common.Exceptions;
+using EGameCafe.Application.Common.Interfaces;
 using EGameCafe.Application.Common.Models;
 using EGameCafe.Application.Models;
 using EGameCafe.Application.Models.Identity;
@@ -7,7 +8,6 @@ using EGameCafe.Infrastructure.PreparedResults;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Caching.Memory;
-using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using System;
@@ -22,7 +22,7 @@ namespace EGameCafe.Infrastructure.Identity
 {
     public class IdentityService : IIdentityService
     {
-      
+
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
@@ -53,18 +53,39 @@ namespace EGameCafe.Infrastructure.Identity
             _jwtKeys = jwtKeys;
         }
 
+        public async Task<UserProfileModel> UserProfile(string userId)
+        {
+            var user = await _userManager.FindByIdAsync(userId);
+
+            if (user == null)
+            {
+                throw new NotFoundException("user not found");
+            }
+
+            var userProfile = new UserProfileModel
+            {
+                FirstName = user.FirstName,
+                BirthDate = user.BirthDate,
+                LastName = user.LastName,
+                ProfileImage = user.ProfileImage,
+                Username = user.UserName
+            };
+
+            return userProfile;
+        }
+
         public async Task<Result> CreateUserAsync(RegisterModel model)
         {
             try
             {
                 bool validEmail = IsValidEmail(model.Confirmation);
-                
+
                 var user = new ApplicationUser
                 {
                     UserName = model.Username,
                     Email = model.Email,
                     FirstName = " ",
-                    LastName = " ", 
+                    LastName = " ",
                     BirthDate = model.BirthDate
                 };
 
@@ -77,7 +98,7 @@ namespace EGameCafe.Infrastructure.Identity
                 //await _userManager.AddToRoleAsync(user, "User");
 
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
-                
+
                 return SendConfirmation(validEmail, token, user).Result;
             }
             catch (Exception ex)
@@ -260,7 +281,6 @@ namespace EGameCafe.Infrastructure.Identity
 
             else user = await _userManager.FindByNameAsync(model.Username);
 
-
             if (user == null)
             {
                 return new AuthenticationResult { Succeeded = false, EnError = "User not found", FaError = "حساب کاربری با این نام وجود ندارد" };
@@ -345,6 +365,7 @@ namespace EGameCafe.Infrastructure.Identity
 
         public async Task<AuthenticationResult> GenerateToken(ApplicationUser user, DateTime date = default)
         {
+
             var tokenHandler = new JwtSecurityTokenHandler();
             var key = Encoding.UTF8.GetBytes(_jwtKeys.Value.SigningKey);
             var audience = _jwtKeys.Value.Site;
@@ -355,8 +376,9 @@ namespace EGameCafe.Infrastructure.Identity
                 new Claim(JwtRegisteredClaimNames.Sub, user.UserName),
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id),
-                new Claim(JwtRegisteredClaimNames.FamilyName, user.FullName())
+                new Claim(JwtRegisteredClaimNames.FamilyName, user.FullName()),
             };
+
 
             var userClaims = await _userManager.GetClaimsAsync(user);
             claims.AddRange(userClaims);
@@ -410,6 +432,7 @@ namespace EGameCafe.Infrastructure.Identity
                 Token = tokenHandler.WriteToken(token),
                 Username = user.UserName
             };
+
         }
 
         private ClaimsPrincipal GetPrincipalFromToken(string token)

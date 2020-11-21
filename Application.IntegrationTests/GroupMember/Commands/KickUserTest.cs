@@ -1,31 +1,29 @@
 ﻿using EGameCafe.Application.Common.Exceptions;
-using EGameCafe.Application.GroupMember.Commands.KickUser;
+using EGameCafe.Application.GroupMember.Commands.JoinGroup;
 using EGameCafe.Domain.Entities;
 using EGameCafe.Domain.Enums;
 using FluentAssertions;
 using NUnit.Framework;
 using System.Threading.Tasks;
 
-
 namespace Application.IntegrationTests.GroupMember.Commands
 {
     using static Testing;
 
-    public class JoinGroupTests : TestBase
+    public class KickUserTest : TestBase
     {
         [Test]
         public void ShouldRequireMinimumFields()
         {
-            var command = new KickUserCommand();
+            var command = new JoinGroupCommand();
 
             FluentActions.Invoking(() =>
                 SendAsync(command)).Should().Throw<ValidationException>();
         }
 
         [Test]
-        public async Task ShouldKickFromGroupAndReturnSucceeded()
+        public async Task ShouldJoinToGroupAndReturnSucceeded()
         {
-
             var userId = await RunAsDefaultUserAsync();
 
             var groupId = await GenerateRandomId();
@@ -37,39 +35,26 @@ namespace Application.IntegrationTests.GroupMember.Commands
                 GamingGroupGroupId = groupId,
                 GroupName = "gpTest",
                 GroupType = GroupType.publicGroup,
-                SharingLink = sharingLink,
+                SharingLink = sharingLink
             };
 
             await AddAsync(item);
 
-
-            var groupMemberId = await GenerateRandomId();
-
-            var groupMember = new GamingGroupMembers
+            var command = new JoinGroupCommand
             {
-                GroupId = groupId,
-                GroupMemberId = groupMemberId,
-                UserId = userId
-            };
-
-            await AddAsync(groupMember);
-
-            var command = new KickUserCommand
-            {
-                GroupId = groupId,
-                UserId = userId
+                UserId = userId,
+                GroupId = groupId
             };
 
             var result = await SendAsync(command);
 
             result.Should().NotBeNull();
             result.Succeeded.Should().BeTrue();
-            result.Status.Should().Equals(200);
-
+            result.Status.Should().Equals(201);
         }
 
         [Test]
-        public async Task ShouldKickFromGroup()
+        public async Task ShouldJoinMemberToGroup()
         {
             var userId = await RunAsDefaultUserAsync();
 
@@ -82,26 +67,15 @@ namespace Application.IntegrationTests.GroupMember.Commands
                 GamingGroupGroupId = groupId,
                 GroupName = "gpTest",
                 GroupType = GroupType.publicGroup,
-                SharingLink = sharingLink,
+                SharingLink = sharingLink
             };
 
             await AddAsync(item);
 
-            var groupMemberId = await GenerateRandomId();
-
-            var groupMember = new GamingGroupMembers
+            var command = new JoinGroupCommand
             {
-                GroupId = groupId,
-                GroupMemberId = groupMemberId,
-                UserId = userId
-            };
-
-            await AddAsync(groupMember);
-
-            var command = new KickUserCommand
-            {
-                GroupId = groupId,
-                UserId = userId
+                UserId = userId,
+                GroupId = groupId
             };
 
             var result = await SendAsync(command);
@@ -111,27 +85,8 @@ namespace Application.IntegrationTests.GroupMember.Commands
             gamingGroup.Should().NotBeNull();
             gamingGroup.GroupId.Should().Be(groupId);
             gamingGroup.UserId.Should().Be(userId);
-            gamingGroup.Block.Should().Be(true);
             //gamingGroup..Should().Be(userId);
             //gamingGroup.Created.Should().BeCloseTo(DateTime.Now, 10000);
         }
-
-        [Test]
-        public async Task ShouldNotFindUser()
-        {
-            var groupId = await GenerateRandomId();
-            var userId = await GenerateRandomId();
-
-            var command = new KickUserCommand
-            {
-                GroupId = groupId,
-                UserId = userId
-            };
-
-            FluentActions.Invoking(() =>
-                SendAsync(command)).Should().Throw<NotFoundException>();
-
-        }
-
     }
 }

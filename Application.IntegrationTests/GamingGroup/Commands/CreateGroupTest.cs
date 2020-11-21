@@ -16,7 +16,7 @@ namespace Application.IntegrationTests.GamingGroup.Commands
         [Test]
         public void ShouldRequireMinimumFields()
         {
-            var command = new CreateGroupCommand("", GroupType.publicGroup);
+            var command = new CreateGroupCommand { GroupName = "", GroupType = GroupType.publicGroup };
 
             FluentActions.Invoking(() =>
                 SendAsync(command)).Should().Throw<ValidationException>();
@@ -25,7 +25,7 @@ namespace Application.IntegrationTests.GamingGroup.Commands
         [Test]
         public async Task ShouldCreateGamingGroupAndReturnSucceeded()
         {
-            var command = new CreateGroupCommand("gptest",GroupType.privateGroup);
+            var command = new CreateGroupCommand { GroupName = "gptest", GroupType = GroupType.privateGroup };
 
             var result = await SendAsync(command);
 
@@ -39,7 +39,7 @@ namespace Application.IntegrationTests.GamingGroup.Commands
         {
             var userId = await RunAsDefaultUserAsync();
 
-            var command = new CreateGroupCommand("gptest",GroupType.privateGroup);
+            var command = new CreateGroupCommand { GroupName = "gptest", GroupType = GroupType.privateGroup };
 
             var result = await SendAsync(command);
 

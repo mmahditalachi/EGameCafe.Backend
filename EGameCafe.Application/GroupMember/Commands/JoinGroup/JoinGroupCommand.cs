@@ -10,12 +10,6 @@ namespace EGameCafe.Application.GroupMember.Commands.JoinGroup
 {
     public class JoinGroupCommand : IRequest<Result>
     {
-        public JoinGroupCommand(string userId, string groupId)
-        {
-            UserId = userId;
-            GroupId = groupId;
-        }
-
         public string UserId { get; set; }
         public string GroupId { get; set; }
     }

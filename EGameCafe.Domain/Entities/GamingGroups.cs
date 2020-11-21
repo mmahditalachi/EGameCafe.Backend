@@ -11,7 +11,7 @@ namespace EGameCafe.Domain.Entities
         public string GamingGroupGroupId { get; set; }
         public string GroupName { get; set; }
         public GroupType GroupType { get; set; }
-        
+        public string SharingLink { get; set; }
         public List<GamingGroupMembers> GroupMembers { get; set; }
     }
 }

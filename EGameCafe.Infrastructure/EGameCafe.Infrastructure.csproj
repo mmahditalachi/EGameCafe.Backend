@@ -17,6 +17,8 @@
     <Compile Remove="Migrations\20201029124707_InitialDb.Designer.cs" />
     <Compile Remove="Migrations\20201102161916_CreateGroups.cs" />
     <Compile Remove="Migrations\20201102161916_CreateGroups.Designer.cs" />
+    <Compile Remove="Migrations\20201121104819_AddColumnSharingLinkToGroups.cs" />
+    <Compile Remove="Migrations\20201121104819_AddColumnSharingLinkToGroups.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
