@@ -24,3 +24,9 @@ Verify that the DefaultConnection connection string within appsettings.json poin
 
 When you run the application the database will be automatically created (if necessary) and the latest migrations will be applied.
 
+### Getting Started
+
+1. Install the latest [.NET Core SDK](https://dotnet.microsoft.com/download)
+2. Navigate to EGameCafe.Server and run dotnet run to launch the back end (ASP.NET Core Web API)
+
+
