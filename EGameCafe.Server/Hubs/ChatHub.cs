@@ -18,9 +18,10 @@ namespace EGameCafe.Server.Hubs
             await Clients.All.SendAsync("ReceiveMessage", user, message);
         }
 
-        public Task SendMessageToGroup(string groupName, string message)
+        public Task SendMessageToGroup(string groupName,string userId ,string message)
         {
-            return Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId}: {message}");
+            //return Clients.Group(groupName).SendAsync("Send", $"{Context.ConnectionId}: {message}");
+            return Clients.Group(groupName).SendAsync("Send", userId, message);
         }
 
         public async Task AddToGroup(string groupName)

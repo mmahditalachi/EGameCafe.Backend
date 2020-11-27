@@ -95,13 +95,6 @@ namespace EGameCafe.Server.Controllers
             return result.Succeeded ? (IActionResult)Ok(result) : BadRequest(result);
         }
 
-        [HttpPost("RegisterUserInfo")]
-        public async Task<IActionResult> RegisterUserInfo(RegisterUserInfoModel model)
-        {
-            var result = await _identityService.RegisterUserInfo(model);
-            return result.Succeeded ? (IActionResult)Ok(result) : BadRequest(result);
-        }
-
         [HttpGet("UserProfile")]
         public async Task<IActionResult> UserProfile(string userId)
         {
