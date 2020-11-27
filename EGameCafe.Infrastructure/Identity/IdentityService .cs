@@ -84,9 +84,9 @@ namespace EGameCafe.Infrastructure.Identity
                 {
                     UserName = model.Username,
                     Email = model.Email,
-                    FirstName = " ",
-                    LastName = " ",
-                    BirthDate = model.BirthDate
+                    FirstName = model.Firstname,
+                    LastName = model.Lastname,
+                    BirthDate = DateTime.Now
                 };
 
                 if (!string.IsNullOrWhiteSpace(model.PhoneNumber)) user.PhoneNumber = model.PhoneNumber;
@@ -105,23 +105,6 @@ namespace EGameCafe.Infrastructure.Identity
             {
                 throw ex;
             }
-        }
-
-        public async Task<Result> RegisterUserInfo(RegisterUserInfoModel userInfo)
-        {
-            var user = await _userManager.FindByNameAsync(userInfo.Username);
-
-            if (user == null)
-            {
-                return APIResults.UserNotFoundResult();
-            }
-
-            user.FirstName = userInfo.Firstname;
-            user.LastName = userInfo.LastName;
-
-            var result = await _userManager.UpdateAsync(user);
-
-            return result.ToApplicationResult();
         }
 
         public async Task<string> GetUserNameAsync(string userId)
@@ -148,22 +131,25 @@ namespace EGameCafe.Infrastructure.Identity
             return (Result.Success(), otp.Token);
         }
 
-        public async Task<Result> AccountOTPConfirmation(OTPConfirmationModel model)
+        public async Task<AuthenticationResult> AccountOTPConfirmation(OTPConfirmationModel model)
         {
             var user = await _userManager.FindByEmailAsync(model.Email);
 
             if (user == null)
             {
-                return APIResults.UserNotFoundResult();
+                return new AuthenticationResult { Succeeded = false, EnError = "User not found", FaError = "حساب کاربری با این نام وجود ندارد" };
             }
 
             var OTPResult = await OTPConfirmation(model.RandomNumber, model.Email);
 
-            if (!OTPResult.result.Succeeded) return OTPResult.result;
+            if (!OTPResult.result.Succeeded)
+                return new AuthenticationResult { Succeeded = false, EnError = "confirmation code is not valid", FaError = "کد تایید صحیح نمی باشد " };
 
             var result = await _userManager.ConfirmEmailAsync(user, OTPResult.token);
 
-            return result.ToApplicationResult();
+            await _signInManager.SignInAsync(user, false);
+
+            return await GenerateToken(user);
         }
 
         public async Task<Result> EmailConfirmation(EmailConfirmationModel model)
