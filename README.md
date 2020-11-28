@@ -1,10 +1,10 @@
 # EGameCafe Backend
 
-EgGane cafe Backend project 
+EGameCafe Backend project 
 
 ## What is EGameCafe ? 
 
-EGameCafe is a new kide of gaming social media for auto match making and manul match making base on user gaming exp . 
+EGameCafe is a new kind of gaming social media for auto match making and manual match making based on user gaming exp . 
 
 ### Architecture : 
 
