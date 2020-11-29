@@ -3,7 +3,9 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using EGameCafe.Domain.Entities;
 using EGameCafe.Infrastructure.Identity;
+using EGameCafe.Infrastructure.Persistence;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
@@ -33,24 +35,13 @@ namespace EGameCafe.Server
             {
                 using (var scope = host.Services.CreateScope())
                 {
-                    var userManager = scope.ServiceProvider
-                        .GetRequiredService<UserManager<ApplicationUser>>();
+                    var services = scope.ServiceProvider;
 
-                    var user = new ApplicationUser()
-                    {
-                        Email = "test@test.com",
-                        FirstName = "mohammad",
-                        LastName = "Talachi",
-                        UserName = "test_test",
-                        PhoneNumber = "0933333333",
-                        BirthDate = new DateTime(1999, 11, 24)
-                    };
+                    var context = services.GetRequiredService<ApplicationDbContext>();
 
-                    userManager.CreateAsync(user, "password").GetAwaiter().GetResult();
+                    var userManager = services.GetRequiredService<UserManager<ApplicationUser>>();
 
-                    var token = userManager.GenerateEmailConfirmationTokenAsync(user).GetAwaiter().GetResult();
-
-                    userManager.ConfirmEmailAsync(user, token).GetAwaiter();
+                    ApplicationDbContextSeed.SeedSampleDataAsync(context, userManager).GetAwaiter().GetResult();
                 }
             }
 
