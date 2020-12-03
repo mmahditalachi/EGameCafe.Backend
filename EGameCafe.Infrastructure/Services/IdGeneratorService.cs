@@ -15,7 +15,7 @@ namespace EGameCafe.Infrastructure.Services
         {
             DateTime curreentTime = dateTime.Now;
 
-            string id = curreentTime.Hour.ToString("D2") + curreentTime.Minute.ToString("D2") + curreentTime.Second.ToString("D2") + configureValue;
+            string id = curreentTime.Hour.ToString("D2") + curreentTime.Minute.ToString("D2") + curreentTime.Second.ToString("D2") + curreentTime.Millisecond.ToString("D2") + configureValue;
 
             using (SHA256 sha256Hash = SHA256.Create())
             {

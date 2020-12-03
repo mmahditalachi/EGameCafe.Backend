@@ -13,8 +13,8 @@ namespace EGameCafe.Application.Common.Interfaces
     {
         DbSet<OTP> OTP { get; set; }
         DbSet<RefreshToken> RefreshTokens { get; set; }
-        DbSet<GamingGroupMembers> GroupMembers { get; set; }
-        DbSet<GamingGroups> GamingGroups { get; set; }
+        DbSet<GroupMember> GroupMember { get; set; }
+        DbSet<Group> Group { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

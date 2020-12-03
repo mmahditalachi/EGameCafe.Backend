@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EGameCafe.Application.GroupMember.Commands.LeaveGroup
+namespace EGameCafe.Application.GroupMembers.Commands.LeaveGroup
 {
     public class LeaveGroupCommand : IRequest<Result>
     {
@@ -26,14 +26,14 @@ namespace EGameCafe.Application.GroupMember.Commands.LeaveGroup
 
         public async Task<Result> Handle(LeaveGroupCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.GroupMembers.FirstOrDefaultAsync(e => e.UserId == request.UserId && e.GroupId == request.GroupId);
+            var entity = await _context.GroupMember.FirstOrDefaultAsync(e => e.UserId == request.UserId && e.GroupId == request.GroupId);
 
             if (entity == null)
             {
-                throw new NotFoundException(nameof(GamingGroups), request.GroupId);
+                throw new NotFoundException(nameof(Group), request.GroupId);
             }
 
-            _context.GroupMembers.Remove(entity);
+            _context.GroupMember.Remove(entity);
 
             await _context.SaveChangesAsync(cancellationToken);
 

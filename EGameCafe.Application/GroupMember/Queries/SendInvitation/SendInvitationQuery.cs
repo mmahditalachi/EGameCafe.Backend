@@ -8,7 +8,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EGameCafe.Application.GroupMember.Queries.SendInvitation
+namespace EGameCafe.Application.GroupMembers.Queries.SendInvitation
 {
     public class SendInvitationQuery : IRequest<string>
     {
@@ -28,7 +28,7 @@ namespace EGameCafe.Application.GroupMember.Queries.SendInvitation
 
         public async Task<string> Handle(SendInvitationQuery request, CancellationToken cancellationToken)
         {
-            var entry = await _context.GamingGroups.FirstOrDefaultAsync(e=>e.GamingGroupGroupId == request.GroupId);
+            var entry = await _context.Group.FirstOrDefaultAsync(e=>e.GroupId == request.GroupId);
 
             if(entry == null)
             {

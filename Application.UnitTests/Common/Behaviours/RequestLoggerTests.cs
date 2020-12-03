@@ -1,6 +1,6 @@
 ﻿using EGameCafe.Application.Common.Behaviours;
 using EGameCafe.Application.Common.Interfaces;
-using EGameCafe.Application.GamingGroup.Commands.CreateGroup;
+using EGameCafe.Application.Groups.Commands.CreateGroup;
 using EGameCafe.Domain.Enums;
 using Microsoft.Extensions.Logging;
 using Moq;

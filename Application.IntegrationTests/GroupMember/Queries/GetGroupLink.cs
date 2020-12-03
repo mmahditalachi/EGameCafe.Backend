@@ -1,11 +1,12 @@
 ﻿using EGameCafe.Application.Common.Exceptions;
-using EGameCafe.Application.GroupMember.Queries.SendInvitation;
+using EGameCafe.Application.GroupMembers.Queries.SendInvitation;
 using FluentAssertions;
 using NUnit.Framework;
+using System;
 using System.Threading.Tasks;
 
 
-namespace Application.IntegrationTests.GroupMember.Queries
+namespace Application.IntegrationTests.GroupMembers.Queries
 {
     using static Testing;
 
@@ -25,7 +26,7 @@ namespace Application.IntegrationTests.GroupMember.Queries
         {
             var userId = await RunAsDefaultUserAsync();
 
-            var groupId = await GenerateRandomId();
+            var groupId = Guid.NewGuid().ToString();
 
             var result = new SendInvitationQuery
             {

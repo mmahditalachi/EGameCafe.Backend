@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EGameCafe.Application.GroupMember.Commands.KickUser
+namespace EGameCafe.Application.GroupMembers.Commands.KickUser
 {
     public class KickUserCommand : IRequest<Result>
     {
@@ -26,16 +26,16 @@ namespace EGameCafe.Application.GroupMember.Commands.KickUser
 
         public async Task<Result> Handle(KickUserCommand request, CancellationToken cancellationToken)
         {
-            var entity = await _context.GroupMembers.FirstOrDefaultAsync(e => e.UserId == request.UserId && e.GroupId == request.GroupId);
+            var entity = await _context.GroupMember.FirstOrDefaultAsync(e => e.UserId == request.UserId && e.GroupId == request.GroupId);
 
             if (entity == null)
             {
-                throw new NotFoundException(nameof(GamingGroups), request.GroupId);
+                throw new NotFoundException(nameof(Group), request.GroupId);
             }
 
-            entity.Block = true;
+            entity.IsBlock = true;
 
-            _context.GroupMembers.Update(entity);
+            _context.GroupMember.Update(entity);
 
             await _context.SaveChangesAsync(cancellationToken);
 

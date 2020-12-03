@@ -10,7 +10,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EGameCafe.Application.GroupMember.Queries.GetUserGroups
+namespace EGameCafe.Application.GroupMembers.Queries.GetUserGroups
 {
     public class GetUserGroupsQuery : IRequest<GetUserGroupsVm>
     {
@@ -44,7 +44,7 @@ namespace EGameCafe.Application.GroupMember.Queries.GetUserGroups
                 return entity;
             }
 
-            entity = await _context.GroupMembers
+            entity = await _context.GroupMember
                    .Where(e => e.UserId == request.UserId)
                    .ProjectTo<GetUserGroupsVm>(_mapper.ConfigurationProvider)
                    .FirstOrDefaultAsync();

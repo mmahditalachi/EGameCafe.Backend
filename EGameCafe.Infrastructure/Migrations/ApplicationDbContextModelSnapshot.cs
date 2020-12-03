@@ -19,32 +19,9 @@ namespace EGameCafe.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
-            modelBuilder.Entity("EGameCafe.Domain.Entities.GamingGroupMembers", b =>
+            modelBuilder.Entity("EGameCafe.Domain.Entities.Group", b =>
                 {
-                    b.Property<string>("GroupMemberId")
-                        .HasColumnType("nvarchar(64)")
-                        .HasMaxLength(64);
-
-                    b.Property<bool>("Block")
-                        .HasColumnType("bit");
-
                     b.Property<string>("GroupId")
-                        .HasColumnType("nvarchar(64)");
-
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.HasKey("GroupMemberId");
-
-                    b.HasIndex("GroupId");
-
-                    b.ToTable("GroupMembers");
-                });
-
-            modelBuilder.Entity("EGameCafe.Domain.Entities.GamingGroups", b =>
-                {
-                    b.Property<string>("GamingGroupGroupId")
                         .HasColumnType("nvarchar(64)")
                         .HasMaxLength(64);
 
@@ -72,9 +49,32 @@ namespace EGameCafe.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.HasKey("GamingGroupGroupId");
+                    b.HasKey("GroupId");
 
-                    b.ToTable("GamingGroups");
+                    b.ToTable("Group");
+                });
+
+            modelBuilder.Entity("EGameCafe.Domain.Entities.GroupMember", b =>
+                {
+                    b.Property<string>("GroupMemberId")
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("GroupId")
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<bool>("IsBlock")
+                        .HasColumnType("bit");
+
+                    b.Property<string>("UserId")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.HasKey("GroupMemberId");
+
+                    b.HasIndex("GroupId");
+
+                    b.ToTable("GroupMember");
                 });
 
             modelBuilder.Entity("EGameCafe.Domain.Entities.OTP", b =>
@@ -352,9 +352,9 @@ namespace EGameCafe.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
-            modelBuilder.Entity("EGameCafe.Domain.Entities.GamingGroupMembers", b =>
+            modelBuilder.Entity("EGameCafe.Domain.Entities.GroupMember", b =>
                 {
-                    b.HasOne("EGameCafe.Domain.Entities.GamingGroups", "GamingGroup")
+                    b.HasOne("EGameCafe.Domain.Entities.Group", "Group")
                         .WithMany("GroupMembers")
                         .HasForeignKey("GroupId");
                 });

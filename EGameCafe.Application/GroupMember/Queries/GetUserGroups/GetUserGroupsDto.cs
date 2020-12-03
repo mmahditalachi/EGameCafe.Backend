@@ -8,16 +8,16 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EGameCafe.Application.GroupMember.Queries.GetUserGroups
+namespace EGameCafe.Application.GroupMembers.Queries.GetUserGroups
 {
     public class GetUserGroupsDto  : IMapFrom<GetUserGroupsDto>
     {
-        public string GamingGroupGroupId { get; set; }
+        public string GroupId { get; set; }
         public string GroupName { get; set; }
         public GroupType GroupType { get; set; }
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<GamingGroups, GetUserGroupsDto>();
+            profile.CreateMap<Group, GetUserGroupsDto>();
         }
     }
 }

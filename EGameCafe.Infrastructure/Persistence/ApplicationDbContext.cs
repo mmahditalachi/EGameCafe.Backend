@@ -30,8 +30,8 @@ namespace EGameCafe.Infrastructure.Persistence
 
         public DbSet<OTP> OTP { get; set; }
         public DbSet<RefreshToken> RefreshTokens { get; set; }
-        public DbSet<GamingGroupMembers> GroupMembers { get; set; }
-        public DbSet<GamingGroups> GamingGroups { get; set; }
+        public DbSet<GroupMember> GroupMember { get; set; }
+        public DbSet<Group> Group { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -60,8 +60,8 @@ namespace EGameCafe.Infrastructure.Persistence
         {
             builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            builder.Entity<GamingGroupMembers>()
-                        .HasOne<GamingGroups>(e => e.GamingGroup)
+            builder.Entity<GroupMember>()
+                        .HasOne<Group>(e => e.Group)
                         .WithMany(d => d.GroupMembers)
                         .HasForeignKey(e => e.GroupId);
 
