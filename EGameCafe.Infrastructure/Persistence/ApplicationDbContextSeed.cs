@@ -41,43 +41,43 @@ namespace EGameCafe.Infrastructure.Persistence
             var userid_2 = await SeedDefaultUserAsync(userManager, "Test_2", "test2@test.com");
 
             // Seed, if necessary
-            if (!context.GamingGroups.Any())
+            if (!context.Group.Any())
             {
-                var item = new GamingGroups
+                var item = new Group
                 {
-                    GamingGroupGroupId = "E17E1211E14BC57544F83D9FD53CD769D2AE0E18A5ABE149A2278C9E0FFE9D03",
+                    GroupId = Guid.NewGuid().ToString(),
                     GroupName = "gpTest",
                     GroupType = GroupType.publicGroup,
                     SharingLink = "DB4C76CF1EE2B97DF9E180314C74F22384C06E82"
                 };
 
-                context.GamingGroups.Add(item);
+                context.Group.Add(item);
 
                 await context.SaveChangesAsync();
             }
 
-            if (!context.GroupMembers.Any())
+            if (!context.GroupMember.Any())
             {
-                var items = new List<GamingGroupMembers>
+                var items = new List<GroupMember>
                 {
-                 new GamingGroupMembers
+                 new GroupMember
                 {
-                    GroupMemberId = "44D2F618B28451C78921B81DC70FE3FF128E933A4499A95C0682BB89CC57C5C6",
-                    Block = false,
+                    GroupMemberId = Guid.NewGuid().ToString(),
+                    IsBlock = false,
                     GroupId = "E17E1211E14BC57544F83D9FD53CD769D2AE0E18A5ABE149A2278C9E0FFE9D03",
                     UserId =  userid_1
                 },
 
-                new GamingGroupMembers
+                new GroupMember
                 {
-                    GroupMemberId = "D187C4C3E2CCF3FB023E58402E4BF93CF34DD534A1CB0D74DFF7984A8F4EB6BE",
-                    Block = false,
-                    GroupId = "E17E1211E14BC57544F83D9FD53CD769D2AE0E18A5ABE149A2278C9E0FFE9D03",
+                    GroupMemberId = Guid.NewGuid().ToString(),
+                    IsBlock = false,
+                    GroupId = Guid.NewGuid().ToString(),
                     UserId = userid_2
                 }
             };
 
-                await context.GroupMembers.AddRangeAsync(items);
+                await context.GroupMember.AddRangeAsync(items);
 
                 await context.SaveChangesAsync();
             }
