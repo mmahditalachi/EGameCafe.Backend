@@ -19,6 +19,12 @@
     <Compile Remove="Migrations\20201102161916_CreateGroups.Designer.cs" />
     <Compile Remove="Migrations\20201121104819_AddColumnSharingLinkToGroups.cs" />
     <Compile Remove="Migrations\20201121104819_AddColumnSharingLinkToGroups.Designer.cs" />
+    <Compile Remove="Migrations\20201203192154_ChangeaTableName.cs" />
+    <Compile Remove="Migrations\20201203192154_ChangeaTableName.Designer.cs" />
+    <Compile Remove="Migrations\20201203194035_ChangeaTableName.cs" />
+    <Compile Remove="Migrations\20201203194035_ChangeaTableName.Designer.cs" />
+    <Compile Remove="Migrations\20201203195912_AlterTableName.cs" />
+    <Compile Remove="Migrations\20201203195912_AlterTableName.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

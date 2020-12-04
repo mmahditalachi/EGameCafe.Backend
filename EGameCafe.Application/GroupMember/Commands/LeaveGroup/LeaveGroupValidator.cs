@@ -1,7 +1,7 @@
 ﻿using FluentValidation;
 
 
-namespace EGameCafe.Application.GroupMember.Commands.LeaveGroup
+namespace EGameCafe.Application.GroupMembers.Commands.LeaveGroup
 {
     public class LeaveGroupValidator : AbstractValidator<LeaveGroupCommand>
     {

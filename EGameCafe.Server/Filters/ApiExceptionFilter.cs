@@ -25,6 +25,7 @@ namespace EGameCafe.Server.Filters
                 { typeof(SMSException), HandleSMSException },
                 { typeof(RequestTimeoutException), HandleRequestTimeout },
                 { typeof(InvalidTokenException), HandleInvalidToken },
+                { typeof(DuplicateUserException), HandleDuplicateUser },
             };
         }
 
@@ -125,5 +126,19 @@ namespace EGameCafe.Server.Filters
             context.ExceptionHandled = true;
         }
 
+        private void HandleDuplicateUser(ExceptionContext context)
+        {
+            var exception = context.Exception as DuplicateUserException;
+
+            var details = Result.Failure(exception.Message, "کاربر تکراری");
+
+            context.Result = new ObjectResult(details)
+            {
+                StatusCode = StatusCodes.Status400BadRequest
+            };
+
+            context.ExceptionHandled = true;
+        }
+        
     }
 }

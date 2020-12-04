@@ -1,12 +1,14 @@
-﻿using EGameCafe.Application.Common.Interfaces;
+﻿using EGameCafe.Application.Common.Exceptions;
+using EGameCafe.Application.Common.Interfaces;
 using EGameCafe.Application.Common.Models;
 using EGameCafe.Domain.Entities;
 using MediatR;
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EGameCafe.Application.GroupMember.Commands.JoinGroup
+namespace EGameCafe.Application.GroupMembers.Commands.JoinGroup
 {
     public class JoinGroupCommand : IRequest<Result>
     {
@@ -31,15 +33,20 @@ namespace EGameCafe.Application.GroupMember.Commands.JoinGroup
         {
             try
             {
-                var entry = new GamingGroupMembers()
+                if(_context.GroupMember.Any())
+                {
+                    throw new DuplicateUserException($"DuplicateUser : {request.UserId} groupId : {request.GroupId}");
+                }
+
+                var entry = new GroupMember()
                 {
                     GroupId = request.GroupId,
                     UserId = request.UserId
                 };
 
-                entry.GroupMemberId = await _idGenerator.BasicIdGenerator(_dateTime, nameof(JoinGroupCommand));
+                entry.GroupMemberId = Guid.NewGuid().ToString();
 
-                _context.GroupMembers.Add(entry);
+                _context.GroupMember.Add(entry);
 
                 await _context.SaveChangesAsync(cancellationToken);
 

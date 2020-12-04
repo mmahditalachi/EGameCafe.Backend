@@ -120,15 +120,6 @@ namespace Application.IntegrationTests
             throw new Exception($"Unable to create {userName}.{Environment.NewLine}{errors}");
         }
 
-        public static async Task<string> GenerateRandomId()
-        {
-            using var scope = _scopeFactory.CreateScope();
-
-            var generator = scope.ServiceProvider.GetService<IIdGenerator>();
-
-            return await generator.BasicIdGenerator(GetDateTime());
-        }
-
         public static async Task<string> GenerateSHA1Hash()
         {
             using var scope = _scopeFactory.CreateScope();

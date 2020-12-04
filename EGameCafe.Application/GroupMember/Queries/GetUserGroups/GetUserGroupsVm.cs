@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace EGameCafe.Application.GroupMember.Queries.GetUserGroups
+namespace EGameCafe.Application.GroupMembers.Queries.GetUserGroups
 {
     public class GetUserGroupsVm
     {

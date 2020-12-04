@@ -1,8 +1,8 @@
 ﻿using AutoMapper;
 using EGameCafe.Application.Common.Mappings;
-using EGameCafe.Application.GamingGroup.Queries.GetAllGroups;
-using EGameCafe.Application.GamingGroup.Queries.GetGroup;
-using EGameCafe.Application.GroupMember.Queries.GetUserGroups;
+using EGameCafe.Application.Groups.Queries.GetAllGroups;
+using EGameCafe.Application.Groups.Queries.GetGroup;
+using EGameCafe.Application.GroupMembers.Queries.GetUserGroups;
 using EGameCafe.Domain.Entities;
 using NUnit.Framework;
 using System;
@@ -31,9 +31,9 @@ namespace Application.UnitTests.Common.Mappings
         }
 
         [Test]
-        [TestCase(typeof(GamingGroups), typeof(GetUserGroupsDto))]
-        [TestCase(typeof(GamingGroups), typeof(GetAllGroupsDto))]
-        [TestCase(typeof(GamingGroups), typeof(GetGroupByIdDto))]
+        [TestCase(typeof(Group), typeof(GetUserGroupsDto))]
+        [TestCase(typeof(Group), typeof(GetAllGroupsDto))]
+        [TestCase(typeof(Group), typeof(GetGroupByIdDto))]
         public void ShouldSupportMappingFromSourceToDestination(Type source, Type destination)
         {
             var instance = Activator.CreateInstance(source);

@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
-using EGameCafe.Application.GamingGroup.Commands.CreateGroup;
-using EGameCafe.Application.GamingGroup.Commands.Removegroup;
-using EGameCafe.Application.GamingGroup.Queries.GetAllGroups;
-using EGameCafe.Application.GamingGroup.Queries.GetGroup;
+using EGameCafe.Application.Groups.Commands.CreateGroup;
+using EGameCafe.Application.Groups.Commands.Removegroup;
+using EGameCafe.Application.Groups.Queries.GetAllGroups;
+using EGameCafe.Application.Groups.Queries.GetGroup;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;

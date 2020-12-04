@@ -10,23 +10,24 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EGameCafe.Application.GroupMembers.Queries.GetUserGroups
+namespace EGameCafe.Application.Groups.Queries.GetGroup
 {
-    public class GetUserGroupsQuery : IRequest<GetUserGroupsVm>
+    public class GetGroupByIdQuery : IRequest<GetGroupByIdDto>
     {
-        public GetUserGroupsQuery(string userId)
-        {
-            UserId = userId;
-        }
+        public string GroupId { get; set; }
 
-        public string UserId { get; set; }
+        public GetGroupByIdQuery(string groupId)
+        {
+            GroupId = groupId;
+        }
     }
 
-    public class Handler : IRequestHandler<GetUserGroupsQuery, GetUserGroupsVm>
+    public class Handler : IRequestHandler<GetGroupByIdQuery, GetGroupByIdDto>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMemoryCache _cache;
         private readonly IMapper _mapper;
+
 
         public Handler(IApplicationDbContext context, IMemoryCache cache, IMapper mapper)
         {
@@ -35,18 +36,20 @@ namespace EGameCafe.Application.GroupMembers.Queries.GetUserGroups
             _mapper = mapper;
         }
 
-        public async Task<GetUserGroupsVm> Handle(GetUserGroupsQuery request, CancellationToken cancellationToken)
+        public async Task<GetGroupByIdDto> Handle(GetGroupByIdQuery request, CancellationToken cancellationToken)
         {
-            string cacheKey = request.UserId + "GetUserGroupsQuery";
+            var entity = new GetGroupByIdDto();
 
-            if (_cache.TryGetValue(cacheKey, out GetUserGroupsVm entity))
+            string cacheKey = request.GroupId + "GetGroupByIdQuery";
+
+            if (_cache.TryGetValue(cacheKey, out entity))
             {
                 return entity;
             }
 
-            entity = await _context.GroupMember
-                   .Where(e => e.UserId == request.UserId)
-                   .ProjectTo<GetUserGroupsVm>(_mapper.ConfigurationProvider)
+            entity = await _context.Group
+                   .Where(e => e.GroupId == request.GroupId)
+                   .ProjectTo<GetGroupByIdDto>(_mapper.ConfigurationProvider)
                    .FirstOrDefaultAsync();
 
             if (entity != null)
@@ -59,8 +62,7 @@ namespace EGameCafe.Application.GroupMembers.Queries.GetUserGroups
                 return entity;
             }
 
-            throw new NotFoundException(nameof(GetUserGroupsQuery), request.UserId);
-
+            throw new NotFoundException(nameof(GetGroupByIdQuery), request.GroupId);
         }
     }
 }

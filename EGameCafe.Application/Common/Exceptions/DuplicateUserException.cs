@@ -1,15 +1,16 @@
 ﻿using System;
 
+
 namespace EGameCafe.Application.Common.Exceptions
 {
-    public class InvalidTokenException : Exception
+    public class DuplicateUserException : Exception
     {
-        public InvalidTokenException()
+        public DuplicateUserException()
             : base()
         {
         }
 
-        public InvalidTokenException(string message)
+        public DuplicateUserException(string message)
             : base(message)
         {
         }
