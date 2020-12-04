@@ -20,10 +20,9 @@ namespace EGameCafe.Application.Common.Interfaces
         Task<Result> ForgotPassword(SendOtpTokenModel model);
         Task<Result> ResetPassword(ResetPasswordModel model);
         Task<Result> SendAccountConfirmationTokenAgain(SendOtpTokenModel model);
-        Task<Result> AccountOTPConfirmation(OTPConfirmationModel model);
+        Task<AuthenticationResult> AccountOTPConfirmation(OTPConfirmationModel model);
         Task<Result> EmailConfirmation(EmailConfirmationModel model);
         Task<Result> ForgotPasswordOTPConfirmation(OTPConfirmationModel model);
-        Task<Result> RegisterUserInfo(RegisterUserInfoModel userInfo);
         Task<UserProfileModel> UserProfile(string userId);
 
     }

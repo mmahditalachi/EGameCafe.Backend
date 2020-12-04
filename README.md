@@ -1,10 +1,10 @@
 # EGameCafe Backend
 
-EgGane cafe Backend project 
+EGameCafe Backend project 
 
 ## What is EGameCafe ? 
 
-EGameCafe is a new kide of gaming social media for auto match making and manul match making base on user gaming exp . 
+EGameCafe is a new kind of gaming social media for auto match making and manual match making based on user gaming exp . 
 
 ### Architecture : 
 
@@ -23,4 +23,20 @@ If you would like to use SQL Server, you will need to update WebUI/appsettings.j
 Verify that the DefaultConnection connection string within appsettings.json points to a valid SQL Server instance.
 
 When you run the application the database will be automatically created (if necessary) and the latest migrations will be applied.
+
+### Getting Started
+
+1. Install the latest [.NET Core SDK](https://dotnet.microsoft.com/download)
+2. Navigate to EGameCafe.Server and run dotnet run to launch the back end (ASP.NET Core Web API) 
+
+You can test authentican and other feature with sample user that creats in start up 
+
+```json
+    {
+        "UserName" : "test_test",
+        "PhoneNumber" : "0933333333",
+        "password": "password"
+    }
+```
+
 

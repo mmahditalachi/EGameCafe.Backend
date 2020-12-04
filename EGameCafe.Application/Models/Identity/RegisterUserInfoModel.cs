@@ -8,7 +8,6 @@ namespace EGameCafe.Application.Models.Identity
     {
         public string Firstname { get; set; }
         public string LastName { get; set; }
-        public bool AcceptRules { get; set; }
         public string Username { get; set; }
     }
 }
