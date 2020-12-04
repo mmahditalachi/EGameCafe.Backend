@@ -29,14 +29,19 @@ When you run the application the database will be automatically created (if nece
 1. Install the latest [.NET Core SDK](https://dotnet.microsoft.com/download)
 2. Navigate to EGameCafe.Server and run dotnet run to launch the back end (ASP.NET Core Web API) 
 
-You can test authentican and other feature with sample user that creats in start up 
+You can test authentican and other feature with sample users that creats in start up 
 
 ```json
     {
-        "UserName" : "test_test",
+        "UserName" : "Test_1",
+        "PhoneNumber" : "0933333333",
+        "password": "password"
+    },
+    {
+        "UserName" : "Test_2",
         "PhoneNumber" : "0933333333",
         "password": "password"
     }
 ```
 
-
+You can seed more data to database in ApplicationDbContextSeed.cs in EGameCafe.Infrastructure.Persistence namespace 
