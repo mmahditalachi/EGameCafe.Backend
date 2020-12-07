@@ -4,8 +4,6 @@ using EGameCafe.Domain.Entities;
 using EGameCafe.Infrastructure.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.Extensions.Options;
-using System.Linq;
 using System.Reflection;
 using System.Threading;
 using System.Threading.Tasks;
@@ -32,6 +30,11 @@ namespace EGameCafe.Infrastructure.Persistence
         public DbSet<RefreshToken> RefreshTokens { get; set; }
         public DbSet<GroupMember> GroupMember { get; set; }
         public DbSet<Group> Group { get; set; }
+        public DbSet<Game> Game { get; set; }
+        public DbSet<Genre> Genres { get; set; }
+        public DbSet<GameGenre> GameGenres { get; set; }
+        public DbSet<UserDetail> UserDetails { get; set; }
+        public DbSet<UserGame> UserGames { get; set; }
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
@@ -64,6 +67,37 @@ namespace EGameCafe.Infrastructure.Persistence
                         .HasOne<Group>(e => e.Group)
                         .WithMany(d => d.GroupMembers)
                         .HasForeignKey(e => e.GroupId);
+
+            //many to many game and genre 
+
+            builder.Entity<GameGenre>()
+                        .HasOne<Genre>(e => e.Genre)
+                        .WithMany(p => p.GameGenres)
+                        .HasForeignKey(e => e.GenreId);
+
+            builder.Entity<GameGenre>()
+                        .HasOne<Game>(e => e.Game)
+                        .WithMany(p => p.GameGenres)
+                        .HasForeignKey(e => e.GameId);
+
+            //many to many game and userDetail
+
+            builder.Entity<UserGame>()
+                        .HasOne<UserDetail>(e => e.UserDetail)
+                        .WithMany(p => p.UserGames)
+                        .HasForeignKey(e => e.UserId);
+
+            builder.Entity<UserGame>()
+                        .HasOne<Game>(e => e.Game)
+                        .WithMany(p => p.UserGames)
+                        .HasForeignKey(e => e.GameId);
+
+            // one to many group and game
+
+            builder.Entity<Group>()
+                        .HasOne<Game>(e => e.Game)
+                        .WithMany(d => d.Groups)
+                        .HasForeignKey(e => e.GameId);
 
             base.OnModelCreating(builder);
         }

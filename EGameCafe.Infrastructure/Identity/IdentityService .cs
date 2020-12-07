@@ -26,7 +26,7 @@ namespace EGameCafe.Infrastructure.Identity
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly SignInManager<ApplicationUser> _signInManager;
-        private readonly IApplicationDbContext _applicationDbContext;
+        private readonly IApplicationDbContext _context;
         private readonly IMobileSenders _mobileSenders;
         private readonly IEmailSender _emailSender;
         private readonly IMemoryCache _memoryCache;
@@ -46,7 +46,7 @@ namespace EGameCafe.Infrastructure.Identity
             _userManager = userManager;
             _roleManager = roleManager;
             _signInManager = signInManager;
-            _applicationDbContext = applicationDbContext;
+            _context = applicationDbContext;
             _mobileSenders = mobileSenders;
             _emailSender = emailSender;
             _memoryCache = memoryCache;
@@ -95,6 +95,10 @@ namespace EGameCafe.Infrastructure.Identity
 
                 if (!result.Succeeded) return result.ToApplicationResult();
 
+                var userDetail = new UserDetail { UserId = user.Id };
+
+                _context.UserDetails.Add(userDetail);
+
                 //await _userManager.AddToRoleAsync(user, "User");
 
                 var token = await _userManager.GenerateEmailConfirmationTokenAsync(user);
@@ -116,7 +120,7 @@ namespace EGameCafe.Infrastructure.Identity
 
         private async Task<(Result result, string token)> OTPConfirmation(int OTPNumber, string email)
         {
-            var otp = await _applicationDbContext.OTP
+            var otp = await _context.OTP
                 .FirstOrDefaultAsync(e => e.RandomNumber == OTPNumber &&
                 e.UserId == email && DateTime.Compare(DateTime.UtcNow, e.ExpiryDate) < 0 && e.Used == false);
 
@@ -124,9 +128,9 @@ namespace EGameCafe.Infrastructure.Identity
 
             otp.Used = true;
 
-            _applicationDbContext.OTP.Update(otp);
+            _context.OTP.Update(otp);
 
-            await _applicationDbContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             return (Result.Success(), otp.Token);
         }
@@ -311,7 +315,7 @@ namespace EGameCafe.Infrastructure.Identity
 
             var jti = validateToken.Claims.Single(x => x.Type == JwtRegisteredClaimNames.Jti).Value;
 
-            var storeRefreshToken = await _applicationDbContext.RefreshTokens.SingleOrDefaultAsync(x => x.Token == refreshToken.RefreshToken);
+            var storeRefreshToken = await _context.RefreshTokens.SingleOrDefaultAsync(x => x.Token == refreshToken.RefreshToken);
 
             if (storeRefreshToken == null)
             {
@@ -340,9 +344,9 @@ namespace EGameCafe.Infrastructure.Identity
 
             storeRefreshToken.Used = true;
 
-            _applicationDbContext.RefreshTokens.Update(storeRefreshToken);
+            _context.RefreshTokens.Update(storeRefreshToken);
 
-            await _applicationDbContext.SaveChangesAsync();
+            await _context.SaveChangesAsync();
 
             var user = await _userManager.FindByIdAsync(validateToken.Claims.Single(x => x.Type == "id").Value);
 
@@ -407,8 +411,8 @@ namespace EGameCafe.Infrastructure.Identity
                 ExpiryDate = date.Year == 1 ? DateTime.UtcNow.AddMonths(6) : date
             };
 
-            await _applicationDbContext.RefreshTokens.AddAsync(refreshToken);
-            await _applicationDbContext.SaveChangesAsync();
+            await _context.RefreshTokens.AddAsync(refreshToken);
+            await _context.SaveChangesAsync();
 
             //refreshToken.Token is auto generated
             return new AuthenticationResult

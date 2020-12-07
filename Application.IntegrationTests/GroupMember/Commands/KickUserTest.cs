@@ -117,7 +117,7 @@ namespace Application.IntegrationTests.GroupMembers.Commands
         }
 
         [Test]
-        public async Task ShouldNotFindUser()
+        public void ShouldNotFindUser()
         {
             var groupId = Guid.NewGuid().ToString();
             var userId = Guid.NewGuid().ToString();
@@ -130,7 +130,6 @@ namespace Application.IntegrationTests.GroupMembers.Commands
 
             FluentActions.Invoking(() =>
                 SendAsync(command)).Should().Throw<NotFoundException>();
-
         }
 
     }
