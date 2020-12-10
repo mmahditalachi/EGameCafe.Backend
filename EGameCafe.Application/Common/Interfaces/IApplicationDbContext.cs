@@ -12,7 +12,7 @@ namespace EGameCafe.Application.Common.Interfaces
         DbSet<GroupMember> GroupMember { get; set; }
         DbSet<Group> Group { get; set; }
         DbSet<Game> Game { get; set; }
-        DbSet<Genre> Genres { get; set; }
+        DbSet<Genre> Genre { get; set; }
         DbSet<GameGenre> GameGenres { get; set; }
         DbSet<UserDetail> UserDetails { get; set; }
         DbSet<UserGame> UserGames { get; set; }

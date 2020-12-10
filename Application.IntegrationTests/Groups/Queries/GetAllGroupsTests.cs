@@ -38,7 +38,8 @@ namespace Application.IntegrationTests.Groups.Queries
                 GroupId = Guid.NewGuid().ToString(),
                 GroupName = "gpTest",
                 GroupType = GroupType.privateGroup,
-                SharingLink = await GenerateSHA1Hash()
+                SharingLink = await GenerateSHA1Hash(),
+                Game = new Game { GameName = "test", GameId = Guid.NewGuid().ToString() }
             });
 
             await AddAsync(new Group
@@ -46,7 +47,8 @@ namespace Application.IntegrationTests.Groups.Queries
                 GroupId = Guid.NewGuid().ToString(),
                 GroupName = "gpTest",
                 GroupType = GroupType.publicGroup,
-                SharingLink = await GenerateSHA1Hash()
+                SharingLink = await GenerateSHA1Hash(),
+                Game = new Game { GameName = "test", GameId = Guid.NewGuid().ToString() }
             });
 
             var query = new GetAllGroupsQuery(0, 10, "");
@@ -59,5 +61,7 @@ namespace Application.IntegrationTests.Groups.Queries
 
             result.TotalGroups.Should().Equals(1);
         }
+
+
     }
 }

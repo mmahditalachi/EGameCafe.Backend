@@ -3,10 +3,31 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace EGameCafe.Infrastructure.Migrations
 {
-    public partial class CreateGameAndGenreAndUserDetailTable : Migration
+    public partial class CreateGameAndGenreAndUserDetails : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
+            migrationBuilder.AddColumn<DateTime>(
+                name: "Created",
+                table: "GroupMember",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
+
+            migrationBuilder.AddColumn<string>(
+                name: "CreatedBy",
+                table: "GroupMember",
+                nullable: true);
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "LastModified",
+                table: "GroupMember",
+                nullable: true);
+
+            migrationBuilder.AddColumn<string>(
+                name: "LastModifiedBy",
+                table: "GroupMember",
+                nullable: true);
+
             migrationBuilder.AddColumn<string>(
                 name: "GameId",
                 table: "Group",
@@ -17,6 +38,10 @@ namespace EGameCafe.Infrastructure.Migrations
                 columns: table => new
                 {
                     GameId = table.Column<string>(maxLength: 64, nullable: false),
+                    Created = table.Column<DateTime>(nullable: false),
+                    CreatedBy = table.Column<string>(nullable: true),
+                    LastModified = table.Column<DateTime>(nullable: true),
+                    LastModifiedBy = table.Column<string>(nullable: true),
                     GameName = table.Column<string>(maxLength: 100, nullable: false)
                 },
                 constraints: table =>
@@ -25,7 +50,7 @@ namespace EGameCafe.Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "Genres",
+                name: "Genre",
                 columns: table => new
                 {
                     Id = table.Column<string>(maxLength: 64, nullable: false),
@@ -37,7 +62,7 @@ namespace EGameCafe.Infrastructure.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_Genres", x => x.Id);
+                    table.PrimaryKey("PK_Genre", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -77,9 +102,9 @@ namespace EGameCafe.Infrastructure.Migrations
                         principalColumn: "GameId",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_GameGenres_Genres_GenreId",
+                        name: "FK_GameGenres_Genre_GenreId",
                         column: x => x.GenreId,
-                        principalTable: "Genres",
+                        principalTable: "Genre",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
@@ -160,7 +185,7 @@ namespace EGameCafe.Infrastructure.Migrations
                 name: "UserGames");
 
             migrationBuilder.DropTable(
-                name: "Genres");
+                name: "Genre");
 
             migrationBuilder.DropTable(
                 name: "Game");
@@ -171,6 +196,22 @@ namespace EGameCafe.Infrastructure.Migrations
             migrationBuilder.DropIndex(
                 name: "IX_Group_GameId",
                 table: "Group");
+
+            migrationBuilder.DropColumn(
+                name: "Created",
+                table: "GroupMember");
+
+            migrationBuilder.DropColumn(
+                name: "CreatedBy",
+                table: "GroupMember");
+
+            migrationBuilder.DropColumn(
+                name: "LastModified",
+                table: "GroupMember");
+
+            migrationBuilder.DropColumn(
+                name: "LastModifiedBy",
+                table: "GroupMember");
 
             migrationBuilder.DropColumn(
                 name: "GameId",

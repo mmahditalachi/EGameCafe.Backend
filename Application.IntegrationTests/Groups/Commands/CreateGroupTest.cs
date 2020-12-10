@@ -38,8 +38,14 @@ namespace Application.IntegrationTests.Groups.Commands
         public async Task ShouldCreateGamingGroup()
         {
             var userId = await RunAsDefaultUserAsync();
+            var gameId = Guid.NewGuid().ToString();
 
-            var command = new CreateGroupCommand { GroupName = "gptest", GroupType = GroupType.privateGroup };
+
+            var command = new CreateGroupCommand { 
+                GroupName = "gptest", 
+                GroupType = GroupType.privateGroup,
+                Game = new Game { GameId = gameId, GameName = "test" }
+            };
 
             var result = await SendAsync(command);
 
@@ -48,8 +54,13 @@ namespace Application.IntegrationTests.Groups.Commands
             gamingGroup.Should().NotBeNull();
             gamingGroup.GroupName.Should().Be(command.GroupName);
             gamingGroup.GroupType.Should().Be(command.GroupType);
+
+            gamingGroup.GameId.Should().Be(command.Game.GameId);
+
             gamingGroup.CreatedBy.Should().Be(userId);
+
             gamingGroup.Created.Should().BeCloseTo(DateTime.Now, 10000);
         }
+
     }
 }

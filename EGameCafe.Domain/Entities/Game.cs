@@ -4,7 +4,7 @@ using System.Collections.Generic;
 
 namespace EGameCafe.Domain.Entities
 {
-    public class Game
+    public class Game : AuditableEntity
     {
         public string GameId { get; set; }
         public string GameName { get; set; }

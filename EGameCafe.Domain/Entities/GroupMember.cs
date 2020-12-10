@@ -1,13 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Reflection.Metadata.Ecma335;
-using System.Text;
-using System.Threading.Tasks;
+﻿using EGameCafe.Domain.Common;
 
 namespace EGameCafe.Domain.Entities
 {
-    public class GroupMember
+    public class GroupMember : AuditableEntity
     {
         public string GroupMemberId { get; set; }
         public string UserId { get; set; }

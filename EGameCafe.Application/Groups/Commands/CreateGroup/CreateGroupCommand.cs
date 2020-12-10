@@ -13,6 +13,7 @@ namespace EGameCafe.Application.Groups.Commands.CreateGroup
     {
         public string GroupName { get; set; }
         public GroupType GroupType { get; set; }
+        public Game Game { get; set; }
     }
 
     public class Handler : IRequestHandler<CreateGroupCommand, Result>
@@ -38,7 +39,8 @@ namespace EGameCafe.Application.Groups.Commands.CreateGroup
                 { 
                     GroupName = request.GroupName,
                     GroupType = request.GroupType,
-                    SharingLink = sharingLink
+                    SharingLink = sharingLink,
+                    Game = request.Game
                 };
 
                 entry.GroupId = Guid.NewGuid().ToString();

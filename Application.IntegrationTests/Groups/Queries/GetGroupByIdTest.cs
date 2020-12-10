@@ -19,6 +19,7 @@ namespace Application.IntegrationTests.Groups.Queries
         public async Task ShouldReturnGroupById()
         {
             var groupId = Guid.NewGuid().ToString();
+            var gameId = Guid.NewGuid().ToString();
             var sharingLink = await GenerateSHA1Hash();
 
             var item = new Group
@@ -26,7 +27,8 @@ namespace Application.IntegrationTests.Groups.Queries
                 GroupId = groupId,
                 GroupName = "gpTest",
                 GroupType = GroupType.publicGroup,
-                SharingLink = sharingLink
+                SharingLink = sharingLink,
+                Game = new Game { GameName = "test", GameId = gameId}
             };
 
             await AddAsync(item);
@@ -37,7 +39,36 @@ namespace Application.IntegrationTests.Groups.Queries
 
             result.GroupName.Should().Equals(item.GroupName);
             result.GroupType.Should().Equals(item.GroupType);
+            result.GameName.Should().Equals(item.GroupType);
             
+        }
+
+        [Test]
+        public async Task ShouldGroupGameBeNull()
+        {
+            var groupId = Guid.NewGuid().ToString();
+            var gameId = Guid.NewGuid().ToString();
+            var sharingLink = await GenerateSHA1Hash();
+
+            var item = new Group
+            {
+                GroupId = groupId,
+                GroupName = "gpTest",
+                GroupType = GroupType.publicGroup,
+                SharingLink = sharingLink,
+                Game = new Game { GameId = gameId, GameName = "test"}
+            };
+
+            await AddAsync(item);
+
+            var query = new GetGroupByIdQuery(groupId);
+
+            var result = await SendAsync(query);
+
+            result.GroupName.Should().Equals(item.GroupName);
+            result.GroupType.Should().Equals(item.GroupType);
+
+            result.GameName.Should().Equals(item.Game.GameName);
         }
     }
 }

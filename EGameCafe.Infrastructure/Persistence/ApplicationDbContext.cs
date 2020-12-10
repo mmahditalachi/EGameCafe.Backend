@@ -31,11 +31,10 @@ namespace EGameCafe.Infrastructure.Persistence
         public DbSet<GroupMember> GroupMember { get; set; }
         public DbSet<Group> Group { get; set; }
         public DbSet<Game> Game { get; set; }
-        public DbSet<Genre> Genres { get; set; }
+        public DbSet<Genre> Genre { get; set; }
         public DbSet<GameGenre> GameGenres { get; set; }
         public DbSet<UserDetail> UserDetails { get; set; }
         public DbSet<UserGame> UserGames { get; set; }
-
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<AuditableEntity> entry in ChangeTracker.Entries<AuditableEntity>())

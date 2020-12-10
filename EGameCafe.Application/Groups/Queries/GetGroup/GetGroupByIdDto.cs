@@ -2,11 +2,8 @@
 using EGameCafe.Application.Common.Mappings;
 using EGameCafe.Domain.Entities;
 using EGameCafe.Domain.Enums;
-using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+
 
 namespace EGameCafe.Application.Groups.Queries.GetGroup
 {
@@ -16,10 +13,12 @@ namespace EGameCafe.Application.Groups.Queries.GetGroup
         public string GroupName { get; set; }
         public GroupType GroupType { get; set; }
         public List<GroupMember> GroupMembers { get; set; }
+        public string GameName { get; set; }
 
         public void Mapping(Profile profile)
         {
-            profile.CreateMap<Group, GetGroupByIdDto>();
+            profile.CreateMap<Group, GetGroupByIdDto>()
+                .ForMember(e=>e.GameName, e=>e.MapFrom(e=>e.Game.GameName));
         }
     }
 }
