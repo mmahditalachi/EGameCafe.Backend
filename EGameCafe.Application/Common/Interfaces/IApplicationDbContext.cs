@@ -1,9 +1,5 @@
 ﻿using EGameCafe.Domain.Entities;
 using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -15,6 +11,11 @@ namespace EGameCafe.Application.Common.Interfaces
         DbSet<RefreshToken> RefreshTokens { get; set; }
         DbSet<GroupMember> GroupMember { get; set; }
         DbSet<Group> Group { get; set; }
+        DbSet<Game> Game { get; set; }
+        DbSet<Genre> Genre { get; set; }
+        DbSet<GameGenre> GameGenres { get; set; }
+        DbSet<UserDetail> UserDetails { get; set; }
+        DbSet<UserGame> UserGames { get; set; }
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

@@ -40,7 +40,56 @@ namespace EGameCafe.Infrastructure.Persistence
 
             var userid_2 = await SeedDefaultUserAsync(userManager, "Test_2", "test2@test.com");
 
+            var gameId_1 = Guid.NewGuid().ToString();
+            var gameId_2 = Guid.NewGuid().ToString();
+
+            var game1 = new Game
+            {
+                GameId = gameId_1,
+                GameName = "test__1",
+            };
+
+            var game2 = new Game
+            {
+                GameId = gameId_2,
+                GameName = "test__2",
+            };
+
             // Seed, if necessary
+            if (!context.UserDetails.Any())
+            {
+                var item1 = new UserDetail
+                {
+                    UserId = userid_1,
+                    UserGames = new List<UserGame>()
+                    {
+                        new UserGame { UserId = userid_1, Game = game1 , UserGameId = Guid.NewGuid().ToString() },
+                        new UserGame { UserId = userid_1, Game = game2 , UserGameId = Guid.NewGuid().ToString() }
+                    }
+                };
+
+                context.UserDetails.Add(item1);
+
+                await context.SaveChangesAsync();
+            }
+            if (!context.GameGenres.Any())
+            {
+
+                var genreId = Guid.NewGuid().ToString();
+
+                var item1 = new Genre
+                {
+                    Id = genreId,
+                    Title = "action adventure",
+                };
+
+                var gameGenres = new GameGenre { GameGenreId = Guid.NewGuid().ToString() ,Game = game1, Genre = item1 };
+
+                context.GameGenres.Add(gameGenres);
+
+                await context.SaveChangesAsync();
+
+            }
             if (!context.Group.Any())
             {
                 var item = new Group
@@ -48,7 +97,7 @@ namespace EGameCafe.Infrastructure.Persistence
                     GroupId = Guid.NewGuid().ToString(),
                     GroupName = "gpTest",
                     GroupType = GroupType.publicGroup,
-                    SharingLink = "DB4C76CF1EE2B97DF9E180314C74F22384C06E82"
+                    SharingLink = "DB4C76CF1EE2B97DF9E180314C74F22384C06E82",
                 };
 
                 context.Group.Add(item);
@@ -64,7 +113,7 @@ namespace EGameCafe.Infrastructure.Persistence
                 {
                     GroupMemberId = Guid.NewGuid().ToString(),
                     IsBlock = false,
-                    GroupId = "E17E1211E14BC57544F83D9FD53CD769D2AE0E18A5ABE149A2278C9E0FFE9D03",
+                    GroupId = Guid.NewGuid().ToString(),
                     UserId =  userid_1
                 },
 

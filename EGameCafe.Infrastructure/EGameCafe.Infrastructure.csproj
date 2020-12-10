@@ -25,14 +25,22 @@
     <Compile Remove="Migrations\20201203194035_ChangeaTableName.Designer.cs" />
     <Compile Remove="Migrations\20201203195912_AlterTableName.cs" />
     <Compile Remove="Migrations\20201203195912_AlterTableName.Designer.cs" />
+    <Compile Remove="Migrations\20201207192401_CreateGameAndGenreTable.cs" />
+    <Compile Remove="Migrations\20201207192401_CreateGameAndGenreTable.Designer.cs" />
+    <Compile Remove="Migrations\20201207214408_CreateGameAndGenreAndUserDetailTable.cs" />
+    <Compile Remove="Migrations\20201207214408_CreateGameAndGenreAndUserDetailTable.Designer.cs" />
+    <Compile Remove="Migrations\20201207220906_CreateGameAndGenreAndUserDetailTable.cs" />
+    <Compile Remove="Migrations\20201207220906_CreateGameAndGenreAndUserDetailTable.Designer.cs" />
+    <Compile Remove="Migrations\20201210093803_CreateGameAndGenreAndUserDetailTable.cs" />
+    <Compile Remove="Migrations\20201210093803_CreateGameAndGenreAndUserDetailTable.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>
-    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.9" />
+    <PackageReference Include="MailKit" Version="2.8.0" />
+    <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="3.1.6" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.InMemory" Version="3.1.6" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.6" />
-    <PackageReference Include="MailKit" Version="2.8.0" />
   </ItemGroup>
 
   <ItemGroup>
