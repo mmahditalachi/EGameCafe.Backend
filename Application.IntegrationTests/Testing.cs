@@ -6,6 +6,7 @@ using MediatR;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Moq;
@@ -14,7 +15,6 @@ using Respawn;
 using System;
 using System.IO;
 using System.Linq;
-using System.Text;
 using System.Threading.Tasks;
 
 namespace Application.IntegrationTests
@@ -141,6 +141,15 @@ namespace Application.IntegrationTests
         {
             await _checkpoint.Reset(_configuration.GetConnectionString("DefaultConnection"));
             _currentUserId = null;
+        }
+
+        public static void ResetCache()
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var _memoryCache = scope.ServiceProvider.GetService<IMemoryCache>();
+
+            _memoryCache = new MemoryCache(new MemoryCacheOptions());
         }
 
         public static async Task<TEntity> FindAsync<TEntity>(params object[] keyValues)

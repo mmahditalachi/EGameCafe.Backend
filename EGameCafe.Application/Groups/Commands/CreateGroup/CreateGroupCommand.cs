@@ -20,13 +20,11 @@ namespace EGameCafe.Application.Groups.Commands.CreateGroup
     {
         private readonly IApplicationDbContext _context;
         private readonly IIdGenerator _idGenerator;
-        private readonly IDateTime _dateTime;
 
-        public Handler(IApplicationDbContext context, IIdGenerator idGenerator, IDateTime dateTime)
+        public Handler(IApplicationDbContext context, IIdGenerator idGenerator)
         {
             _context = context;
             _idGenerator = idGenerator;
-            _dateTime = dateTime;
         }
 
         public async Task<Result> Handle(CreateGroupCommand request, CancellationToken cancellationToken)
@@ -44,6 +42,7 @@ namespace EGameCafe.Application.Groups.Commands.CreateGroup
                 };
 
                 entry.GroupId = Guid.NewGuid().ToString();
+                entry.Game.GameId = Guid.NewGuid().ToString();
 
                 _context.Group.Add(entry);
 
