@@ -83,7 +83,7 @@ namespace EGameCafe.Infrastructure.Persistence
                     Title = "action adventure",
                 };
 
-                var gameGenres = new GameGenre { GameGenreId = Guid.NewGuid().ToString() ,Game = game1, Genre = item1 };
+                var gameGenres = new GameGenre { GameGenreId = Guid.NewGuid().ToString(), Game = game1, Genre = item1 };
 
                 context.GameGenres.Add(gameGenres);
 
@@ -92,15 +92,29 @@ namespace EGameCafe.Infrastructure.Persistence
             }
             if (!context.Group.Any())
             {
-                var item = new Group
+                var groups = new List<Group>
                 {
-                    GroupId = Guid.NewGuid().ToString(),
-                    GroupName = "gpTest",
-                    GroupType = GroupType.publicGroup,
-                    SharingLink = "DB4C76CF1EE2B97DF9E180314C74F22384C06E82",
+
+                   new Group
+                   {
+                        GroupId = Guid.NewGuid().ToString(),
+                        GroupName = "gpTest_1",
+                        GroupType = GroupType.publicGroup,
+                        SharingLink = "DB4C76CF1EE2B97DF9E180314C74F22384C06E82",
+                        GameId = gameId_1
+                   },
+                   new Group
+                   {
+                        GroupId = Guid.NewGuid().ToString(),
+                        GroupName = "gpTest_2",
+                        GroupType = GroupType.publicGroup,
+                        SharingLink = "DB4C76CF1EE2B97DF9E180314C74F55684C06E82",
+                        GameId = gameId_2
+                   },
+
                 };
 
-                context.Group.Add(item);
+                await context.Group.AddRangeAsync(groups);
 
                 await context.SaveChangesAsync();
             }
