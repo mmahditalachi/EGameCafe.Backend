@@ -1,8 +1,10 @@
-﻿using MediatR;
+﻿using Microsoft.AspNetCore.Http;
+using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
 using EGameCafe.Application.UsersDetails.Queries.GettUserDetail;
+using EGameCafe.Application.Games.Queries.GetAllGames;
 
 namespace EGameCafe.Server.Controllers
 {
@@ -10,20 +12,20 @@ namespace EGameCafe.Server.Controllers
     [ApiVersion("1")]
     [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
-    public class UserDetailController : ControllerBase
+    public class GameController : ControllerBase
     {
         private readonly IMediator _mediator;
 
-        public UserDetailController(IMediator mediator)
+        public GameController(IMediator mediator)
         {
             _mediator = mediator;
         }
 
         [HttpGet("[action]")]
         [Authorize]
-        public async Task<IActionResult> GetUserDetails(string userId)
+        public async Task<IActionResult> GetAllGames(int from, int count, string sortType)
         {
-            var query = new GetUserDetailQuery(userId);
+            var query = new GetAllGamesQuery(from, count, sortType);
             var result = await _mediator.Send(query);
             return result != null ? (IActionResult)Ok(result) : NotFound();
         }

@@ -56,17 +56,17 @@ namespace EGameCafe.Application.Groups.Queries.GetAllGroups
             switch (request.sortType)
             {
                 case "groupname":
-                    vm.List = await _context.Group.Where(e=>e.GroupType != GroupType.privateGroup).OrderBy(e => e.GroupName).Skip(request.From).Take(request.Count)
+                    vm.List = await _context.Group.Include(e=>e.Game).Where(e=>e.GroupType != GroupType.privateGroup).OrderBy(e => e.GroupName).Skip(request.From).Take(request.Count)
                                     .ProjectTo<GetAllGroupsDto>(_mapper.ConfigurationProvider).ToListAsync();
                     break;
                 case "grouptype":
-                    vm.List = await _context.Group.Where(e => e.GroupType != GroupType.privateGroup).OrderBy(e => e.GroupType).Skip(request.From).Take(request.Count)
+                    vm.List = await _context.Group.Include(e => e.Game).Where(e => e.GroupType != GroupType.privateGroup).OrderBy(e => e.GroupType).Skip(request.From).Take(request.Count)
                                     .ProjectTo<GetAllGroupsDto>(_mapper.ConfigurationProvider).ToListAsync();
                     break;
 
                 default:
-                    vm.List = await _context.Group.Where(e => e.GroupType != GroupType.privateGroup).Skip(request.From).Take(request.Count)
-                        .ProjectTo<GetAllGroupsDto>(_mapper.ConfigurationProvider).ToListAsync(); 
+                    vm.List = await _context.Group.Include(e => e.Game).Where(e => e.GroupType != GroupType.privateGroup).Skip(request.From).Take(request.Count)
+                                   .ProjectTo<GetAllGroupsDto>(_mapper.ConfigurationProvider).ToListAsync(); 
                     break;
             }
 

@@ -23,9 +23,18 @@ namespace Application.IntegrationTests.Groups.Commands
         }
 
         [Test]
-        public async Task ShouldCreateGamingGroupAndReturnSucceeded()
+        public async Task ShouldCreateGroupAndReturnSucceeded()
         {
-            var command = new CreateGroupCommand { GroupName = "gptest", GroupType = GroupType.privateGroup };
+            var game = new Game { GameId = Guid.NewGuid().ToString(), GameName = "test" };
+
+            await AddAsync(game);
+
+            var command = new CreateGroupCommand
+            {
+                GroupName = "gptest",
+                GroupType = GroupType.privateGroup,
+                GameId = game.GameId,
+            };
 
             var result = await SendAsync(command);
 
@@ -35,16 +44,18 @@ namespace Application.IntegrationTests.Groups.Commands
         }
 
         [Test]
-        public async Task ShouldCreateGamingGroup()
+        public async Task ShouldCreateGroup()
         {
             var userId = await RunAsDefaultUserAsync();
             var gameId = Guid.NewGuid().ToString();
 
+            var game = new Game { GameId = gameId, GameName = "test" };
+            await AddAsync(game);
 
             var command = new CreateGroupCommand { 
                 GroupName = "gptest", 
                 GroupType = GroupType.privateGroup,
-                Game = new Game { GameId = gameId, GameName = "test" }
+                GameId = game.GameId,
             };
 
             var result = await SendAsync(command);
@@ -55,7 +66,9 @@ namespace Application.IntegrationTests.Groups.Commands
             gamingGroup.GroupName.Should().Be(command.GroupName);
             gamingGroup.GroupType.Should().Be(command.GroupType);
 
-            gamingGroup.GameId.Should().Be(command.Game.GameId);
+            gamingGroup.GameId.Should().Be(gameId);
+
+            gamingGroup.GameId.Should().Be(gameId);
 
             gamingGroup.CreatedBy.Should().Be(userId);
 

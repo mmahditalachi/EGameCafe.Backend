@@ -14,6 +14,7 @@ namespace EGameCafe.Application.Groups.Queries.GetGroup
         public GroupType GroupType { get; set; }
         public List<GroupMember> GroupMembers { get; set; }
         public string GameName { get; set; }
+        public string SharingLink { get; set; }
 
         public void Mapping(Profile profile)
         {
