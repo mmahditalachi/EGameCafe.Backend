@@ -95,6 +95,60 @@ namespace Application.IntegrationTests.GroupMembers.Commands
         }
 
         [Test]
+        public async Task ShouldJoinUserToMultipleGroup()
+        {
+            var userId = await RunAsDefaultUserAsync();
+
+            var groupId_1 = Guid.NewGuid().ToString();
+            var groupId_2 = Guid.NewGuid().ToString();
+
+            var sharingLink = await GenerateSHA1Hash();
+
+            var gp1 = new Group
+            {
+                GroupId = groupId_1,
+                GroupName = "gpTest",
+                GroupType = GroupType.publicGroup,
+                SharingLink = sharingLink
+            };
+
+            var gp2 = new Group
+            {
+                GroupId = groupId_2,
+                GroupName = "gpTest",
+                GroupType = GroupType.publicGroup,
+                SharingLink = sharingLink
+            };
+
+            await AddAsync(gp1);
+            await AddAsync(gp2);
+
+            var command_1 = new JoinGroupCommand
+            {
+                UserId = userId,
+                GroupId = groupId_1
+            };
+
+            var command_2 = new JoinGroupCommand
+            {
+                UserId = userId,
+                GroupId = groupId_2
+            };
+
+            var result_1 = await SendAsync(command_1);
+
+            result_1.Should().NotBeNull();
+            result_1.Succeeded.Should().BeTrue();
+            result_1.Status.Should().Equals(201);
+
+            var result_2 = await SendAsync(command_2);
+
+            result_2.Should().NotBeNull();
+            result_2.Succeeded.Should().BeTrue();
+            result_2.Status.Should().Equals(201);
+        }
+
+        [Test]
         public async Task ShouldJoinMemberToGroup()
         {
             var userId = await RunAsDefaultUserAsync();
