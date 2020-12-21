@@ -8,7 +8,9 @@ using EGameCafe.Application.Dashboard.Queries.GetUserDashboardInfo;
 
 namespace EGameCafe.Server.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v{version:apiVersion}/[controller]")]
+    [ApiVersion("1")]
+    [ApiExplorerSettings(GroupName = "v1")]
     [ApiController]
     public class DashboardController : ControllerBase
     {

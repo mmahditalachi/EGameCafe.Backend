@@ -12,7 +12,7 @@ namespace EGameCafe.Infrastructure.Persistence
 {
     public class ApplicationDbContextSeed
     {
-        public static async Task<string> SeedDefaultUserAsync(UserManager<ApplicationUser> userManager, string username, string email)
+        public static async Task<string> SeedDefaultUserAsync(UserManager<ApplicationUser> userManager, string username, string email, string id)
         {
             var user = new ApplicationUser()
             {
@@ -21,7 +21,8 @@ namespace EGameCafe.Infrastructure.Persistence
                 LastName = "Talachi",
                 UserName = username,
                 PhoneNumber = "0933333333",
-                BirthDate = new DateTime(1999, 11, 24)
+                BirthDate = new DateTime(1999, 11, 24),
+                Id = id
             };
 
             await userManager.CreateAsync(user, "password");
@@ -36,9 +37,9 @@ namespace EGameCafe.Infrastructure.Persistence
         public static async Task SeedSampleDataAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
 
-            var userid_1 = await SeedDefaultUserAsync(userManager, "Test_1", "test1@test.com");
+            var userid_1 = await SeedDefaultUserAsync(userManager, "Test_1", "test1@test.com", "fc7b1548-cb36-43f1-8c96-4c5843629a68");
 
-            var userid_2 = await SeedDefaultUserAsync(userManager, "Test_2", "test2@test.com");
+            var userid_2 = await SeedDefaultUserAsync(userManager, "Test_2", "test2@test.com", "cc011c60-fc7f-4dd2-906e-f89b23796831");
 
             var gameId_1 = Guid.NewGuid().ToString();
             var gameId_2 = Guid.NewGuid().ToString();
@@ -72,6 +73,30 @@ namespace EGameCafe.Infrastructure.Persistence
 
                 await context.SaveChangesAsync();
             }
+
+            if (!context.UserSystemInfo.Any())
+            {
+                var item1 = new UserSystemInfo
+                {
+                    UserSystemInfoId = Guid.NewGuid().ToString(),
+                    CaseManufacturer = SystemManufacturer.NZXT,
+                    CaseName = "NZXT",
+                    UserId = userid_1,
+                    CpuManufacturer = CpuManufacturer.Amd,
+                    CpuName = "3600xt",
+                    GraphicCardManufacturer = SystemManufacturer.Asus,
+                    GraphicCardName = "rtx 3070",
+                    PowerManufacturer =  SystemManufacturer.CoolerMaster,
+                    PowerName = "600w silver",
+                    RamManufacturer = SystemManufacturer.Corsair,
+                    TotalRam = 16,
+                };
+
+                context.UserSystemInfo.Add(item1);
+
+                await context.SaveChangesAsync();
+            }
+
             if (!context.GameGenres.Any())
             {
 

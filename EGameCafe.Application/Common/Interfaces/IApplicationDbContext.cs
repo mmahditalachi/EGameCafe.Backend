@@ -17,6 +17,7 @@ namespace EGameCafe.Application.Common.Interfaces
         DbSet<UserDetail> UserDetails { get; set; }
         DbSet<UserGame> UserGames { get; set; }
         DbSet<Activity> Activity { get; set; }
+        DbSet<UserSystemInfo> UserSystemInfo { get; set; }
 
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }

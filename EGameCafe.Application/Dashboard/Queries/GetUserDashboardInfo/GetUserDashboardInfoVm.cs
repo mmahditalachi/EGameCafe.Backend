@@ -14,6 +14,7 @@ namespace EGameCafe.Application.Dashboard.Queries.GetUserDashboardInfo
         }
 
         public IList<GetUserDashboardGameDto> GameList { get; set; }
+        public GetUserDashboardSystemDto SystemInfo { get; set; }
         public string UserId { get; set; }
     }
 }
