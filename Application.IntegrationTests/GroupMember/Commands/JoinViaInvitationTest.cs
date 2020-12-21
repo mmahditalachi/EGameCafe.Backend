@@ -1,6 +1,6 @@
 ﻿using EGameCafe.Application.Common.Exceptions;
 using EGameCafe.Application.GroupMembers.Commands.JoinViaInvitation;
-using EGameCafe.Application.GroupMembers.Queries.SendInvitation;
+using EGameCafe.Application.Groups.Queries.SendInvitation;
 using EGameCafe.Domain.Entities;
 using EGameCafe.Domain.Enums;
 using FluentAssertions;
@@ -76,7 +76,6 @@ namespace Application.IntegrationTests.GroupMembers.Commands
             var sendingCommand = new SendInvitationQuery
             {
                 GroupId = groupId,
-                UserId = userId
             };
 
             var sendingResult = await SendAsync(sendingCommand);

@@ -1,5 +1,5 @@
 ﻿using EGameCafe.Application.Common.Exceptions;
-using EGameCafe.Application.GroupMembers.Queries.SendInvitation;
+using EGameCafe.Application.Groups.Queries.SendInvitation;
 using FluentAssertions;
 using NUnit.Framework;
 using System;
@@ -31,7 +31,6 @@ namespace Application.IntegrationTests.GroupMembers.Queries
             var result = new SendInvitationQuery
             {
                 GroupId = groupId,
-                UserId = userId
             };
 
             result.Should().NotBeNull();

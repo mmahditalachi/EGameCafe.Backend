@@ -1,10 +1,9 @@
-﻿using Microsoft.AspNetCore.Http;
-using MediatR;
+﻿using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using EGameCafe.Application.UsersDetails.Queries.GettUserDetail;
 using EGameCafe.Application.Games.Queries.GetAllGames;
+using EGameCafe.Application.Games.Queries.GetUserGamesById;
 
 namespace EGameCafe.Server.Controllers
 {
@@ -26,6 +25,15 @@ namespace EGameCafe.Server.Controllers
         public async Task<IActionResult> GetAllGames(int from, int count, string sortType)
         {
             var query = new GetAllGamesQuery(from, count, sortType);
+            var result = await _mediator.Send(query);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
+        }
+
+        [HttpGet("[action]")]
+        //[Authorize]
+        public async Task<IActionResult> GetUserGameById(string userId)
+        {
+            var query = new GetUserGamesByIdQuery(userId);
             var result = await _mediator.Send(query);
             return result != null ? (IActionResult)Ok(result) : NotFound();
         }

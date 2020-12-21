@@ -2,7 +2,6 @@
 using EGameCafe.Application.GroupMembers.Commands.JoinGroup;
 using EGameCafe.Application.GroupMembers.Commands.JoinViaInvitation;
 using EGameCafe.Application.GroupMembers.Commands.LeaveGroup;
-using EGameCafe.Application.GroupMembers.Queries.SendInvitation;
 using EGameCafe.Application.GroupMembers.Queries.GetUserGroups;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
@@ -49,14 +48,6 @@ namespace EGameCafe.Server.Controllers
             return result != null ? (IActionResult)Ok(result) : BadRequest(result);
         }
 
-        [HttpGet("GetGroupLink/{userId}/{groupId}")]
-        [Authorize]
-        public async Task<IActionResult> GetGroupLink(string userId, string groupId)
-        {
-            var command = new SendInvitationQuery { GroupId = groupId, UserId = userId };
-            var result = await _mediator.Send(command);
-            return result != null ? (IActionResult)Ok(Url.Action("JoinViaGroupInvitation", "GroupMember", new { token = result, userId = userId }, Request.Scheme)) : BadRequest();
-        }
 
         [HttpPost("JoinViaGroupInvitation/{token}/{userId}")]
         [Authorize]
