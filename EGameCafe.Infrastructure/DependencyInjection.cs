@@ -95,6 +95,10 @@ namespace EGameCafe.Infrastructure
 
             services.AddTransient<IEmailSender, EmailSenderService>();
 
+            services.AddTransient<IUserService, UserService>();
+
+            services.AddTransient<IFriendRequestService, FriendRequestService>();
+
             services.AddHttpClient<IMobileSenders, MobileSender>(client =>
             {
                 client.BaseAddress = new Uri("http://RestfulSms.com/");

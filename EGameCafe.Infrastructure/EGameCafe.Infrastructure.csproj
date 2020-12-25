@@ -33,6 +33,8 @@
     <Compile Remove="Migrations\20201207220906_CreateGameAndGenreAndUserDetailTable.Designer.cs" />
     <Compile Remove="Migrations\20201210093803_CreateGameAndGenreAndUserDetailTable.cs" />
     <Compile Remove="Migrations\20201210093803_CreateGameAndGenreAndUserDetailTable.Designer.cs" />
+    <Compile Remove="Migrations\20201225094007_CreateSocialNetworkTables.cs" />
+    <Compile Remove="Migrations\20201225094007_CreateSocialNetworkTables.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

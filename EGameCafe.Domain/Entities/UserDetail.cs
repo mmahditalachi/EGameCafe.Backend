@@ -6,6 +6,8 @@ namespace EGameCafe.Domain.Entities
     public class UserDetail : AuditableEntity
     {
         public string UserId { get; set; }
+        public string Fullname { get; set; }
+        public string Username { get; set; }
 
         public UserSystemInfo UserSystemInfo { get; set; }
 

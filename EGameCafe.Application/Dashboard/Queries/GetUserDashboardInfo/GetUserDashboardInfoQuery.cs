@@ -51,7 +51,11 @@ namespace EGameCafe.Application.Dashboard.Queries.GetUserDashboardInfo
             vm.SystemInfo = await _context.UserSystemInfo
                 .Where(e => e.UserId == request.UserId).ProjectTo<GetUserDashboardSystemDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
 
-            vm.UserId = request.UserId;
+            vm.ActivityList = await _context.Activity
+                .Where(e => e.UserId == request.UserId).ProjectTo<GetUserDashboardActivityDto>(_mapper.ConfigurationProvider).ToListAsync();
+
+            vm.PersonalInfo = await _context.UserDetails
+                .Where(e => e.UserId == request.UserId).ProjectTo<GetUserDashboardPersonalDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
 
             if (vm.GameList.Any())
             {

@@ -1,4 +1,6 @@
 ﻿using EGameCafe.Domain.Common;
+using System.Collections;
+using System.Collections.Generic;
 
 namespace EGameCafe.Domain.Entities
 {
@@ -9,5 +11,6 @@ namespace EGameCafe.Domain.Entities
         public string ActivityText { get; set; }
         public string UserId { get; set; }
         public UserDetail UserDetail { get; set; }
+
     }
 }

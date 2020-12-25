@@ -12,34 +12,18 @@ namespace EGameCafe.Infrastructure.Persistence
 {
     public class ApplicationDbContextSeed
     {
-        public static async Task<string> SeedDefaultUserAsync(UserManager<ApplicationUser> userManager, string username, string email, string id)
-        {
-            var user = new ApplicationUser()
-            {
-                Email = email,
-                FirstName = "mohammad",
-                LastName = "Talachi",
-                UserName = username,
-                PhoneNumber = "0933333333",
-                BirthDate = new DateTime(1999, 11, 24),
-                Id = id
-            };
 
-            await userManager.CreateAsync(user, "password");
-
-            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-
-            await userManager.ConfirmEmailAsync(user, token);
-
-            return user.Id;
-        }
+        public static async Task SeedDefaultUserAsync(UserManager<ApplicationUser> userManager, ApplicationUser user) => await userManager.CreateAsync(user, "password");
 
         public static async Task SeedSampleDataAsync(ApplicationDbContext context, UserManager<ApplicationUser> userManager)
         {
 
-            var userid_1 = await SeedDefaultUserAsync(userManager, "Test_1", "test1@test.com", "fc7b1548-cb36-43f1-8c96-4c5843629a68");
+            var user_1 = new ApplicationUser { Id = "fc7b1548-cb36-43f1-8c96-4c5843629a68", Email = "test1@test.com", FirstName = "mohammad", LastName = "Talachi", UserName = "User_Test_1", PhoneNumber = "09354891892", BirthDate = new DateTime(1999, 11, 24), EmailConfirmed =true };
+            var user_2 = new ApplicationUser { Id = "cc011c60-fc7f-4dd2-906e-f89b23796831", Email = "test2@test.com", FirstName = "arshia", LastName = "majidi", UserName = "User_Test_2", PhoneNumber = "09354891892", BirthDate = new DateTime(1999, 11, 24), EmailConfirmed =true};
 
-            var userid_2 = await SeedDefaultUserAsync(userManager, "Test_2", "test2@test.com", "cc011c60-fc7f-4dd2-906e-f89b23796831");
+            await SeedDefaultUserAsync(userManager, user_1);
+
+            await SeedDefaultUserAsync(userManager, user_2);
 
             var gameId_1 = Guid.NewGuid().ToString();
             var gameId_2 = Guid.NewGuid().ToString();
@@ -59,17 +43,48 @@ namespace EGameCafe.Infrastructure.Persistence
             // Seed, if necessary
             if (!context.UserDetails.Any())
             {
-                var item1 = new UserDetail
+                var items = new List<UserDetail>
                 {
-                    UserId = userid_1,
-                    UserGames = new List<UserGame>()
+                    new UserDetail
                     {
-                        new UserGame { UserId = userid_1, Game = game1 , UserGameId = Guid.NewGuid().ToString() },
-                        new UserGame { UserId = userid_1, Game = game2 , UserGameId = Guid.NewGuid().ToString() }
-                    }
+                        UserId = user_1.Id,
+                        Username = user_1.UserName,
+                        Fullname = user_1.FirstName,
+                        UserGames = new List<UserGame>()
+                        {
+                            new UserGame { UserId = user_1.Id, Game = game1 , UserGameId = Guid.NewGuid().ToString() },
+                            new UserGame { UserId = user_1.Id, Game = game2 , UserGameId = Guid.NewGuid().ToString() }
+                        }
+                    },
+                    new UserDetail
+                    {
+                        UserId = user_2.Id,
+                        Username = user_2.UserName,
+                        Fullname = user_2.FirstName,
+                        UserGames = new List<UserGame>()
+                        {
+                            new UserGame { UserId = user_1.Id, Game = game1 , UserGameId = Guid.NewGuid().ToString() },
+                            new UserGame { UserId = user_1.Id, Game = game2 , UserGameId = Guid.NewGuid().ToString() }
+                        }
+                    },
                 };
 
-                context.UserDetails.Add(item1);
+                await context.UserDetails.AddRangeAsync(items);
+
+                await context.SaveChangesAsync();
+            }
+
+            if (!context.Activity.Any())
+            {
+                var item1 = new Activity
+                {
+                    UserId = user_1.Id,
+                    ActivityId = Guid.NewGuid().ToString(),
+                    ActivityTitle = "morning",
+                    ActivityText = "Hi whats up guys...",
+                };
+
+                context.Activity.Add(item1);
 
                 await context.SaveChangesAsync();
             }
@@ -81,12 +96,12 @@ namespace EGameCafe.Infrastructure.Persistence
                     UserSystemInfoId = Guid.NewGuid().ToString(),
                     CaseManufacturer = SystemManufacturer.NZXT,
                     CaseName = "NZXT",
-                    UserId = userid_1,
+                    UserId = user_1.Id,
                     CpuManufacturer = CpuManufacturer.Amd,
                     CpuName = "3600xt",
                     GraphicCardManufacturer = SystemManufacturer.Asus,
                     GraphicCardName = "rtx 3070",
-                    PowerManufacturer =  SystemManufacturer.CoolerMaster,
+                    PowerManufacturer = SystemManufacturer.CoolerMaster,
                     PowerName = "600w silver",
                     RamManufacturer = SystemManufacturer.Corsair,
                     TotalRam = 16,
@@ -153,7 +168,7 @@ namespace EGameCafe.Infrastructure.Persistence
                     GroupMemberId = Guid.NewGuid().ToString(),
                     IsBlock = false,
                     GroupId = Guid.NewGuid().ToString(),
-                    UserId =  userid_1
+                    UserId =  user_1.Id
                 },
 
                 new GroupMember
@@ -161,7 +176,7 @@ namespace EGameCafe.Infrastructure.Persistence
                     GroupMemberId = Guid.NewGuid().ToString(),
                     IsBlock = false,
                     GroupId = Guid.NewGuid().ToString(),
-                    UserId = userid_2
+                    UserId = user_2.Id
                 }
             };
 
