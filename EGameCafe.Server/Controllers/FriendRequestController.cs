@@ -1,10 +1,7 @@
 ﻿using EGameCafe.Application.Common.Interfaces;
 using EGameCafe.Application.Models.FriendRequest;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Threading.Tasks;
 
 namespace EGameCafe.Server.Controllers
@@ -22,8 +19,16 @@ namespace EGameCafe.Server.Controllers
             _friendRequestService = friendRequestService;
         }
 
+        [HttpGet("[action]")]
+        [Authorize]
+        public async Task<IActionResult> GetAllFriendRequest(string userId)
+        {
+            var result = await _friendRequestService.GetAllFriendRequest(userId);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
+        }
+
         [HttpPost("[action]")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> CreateFriendRequest(FriendRequestModel model)
         {
             var result = await _friendRequestService.CreateAsync(model);
@@ -31,7 +36,7 @@ namespace EGameCafe.Server.Controllers
         }
 
         [HttpPost("[action]")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> AcceptFriendRequest(FriendRequestModel model)
         {
             var result = await _friendRequestService.AcceptAsync(model);
@@ -39,7 +44,7 @@ namespace EGameCafe.Server.Controllers
         }
 
         [HttpPost("[action]")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> DeclineFriendRequest(FriendRequestModel model)
         {
             var result = await _friendRequestService.DeclineAsync(model);
@@ -47,7 +52,7 @@ namespace EGameCafe.Server.Controllers
         }
 
         [HttpPost("[action]")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> RemoveFriendRequest(RemoveFriendRequestModel model)
         {
             var result = await _friendRequestService.Remove(model);

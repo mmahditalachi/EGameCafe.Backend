@@ -1,8 +1,13 @@
-﻿using EGameCafe.Application.Common.Interfaces;
+﻿using EGameCafe.Application.Common.Exceptions;
+using EGameCafe.Application.Common.Interfaces;
 using EGameCafe.Application.Common.Models;
 using EGameCafe.Domain.Entities;
 using EGameCafe.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Caching.Memory;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -12,11 +17,14 @@ namespace EGameCafe.Infrastructure.Identity
     {
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly IApplicationDbContext _context;
+        private readonly IMemoryCache _cache;
 
-        public UserService(UserManager<ApplicationUser> userManager, IApplicationDbContext context)
+
+        public UserService(UserManager<ApplicationUser> userManager, IApplicationDbContext context, IMemoryCache cache)
         {
             _userManager = userManager;
             _context = context;
+            _cache = cache;
         }
 
         public async Task<Result> MakeFriends(string senderId, string receiverId)
@@ -25,6 +33,7 @@ namespace EGameCafe.Infrastructure.Identity
             {
                 var userFriend = new UserFriend
                 {
+                    Id = Guid.NewGuid().ToString(),
                     UserId = senderId,
                     FriendId = receiverId
                 };
@@ -37,6 +46,31 @@ namespace EGameCafe.Infrastructure.Identity
             }
 
             return Result.Failure("user not found", "user not found exception");
+        }
+
+        public async Task<List<UserFriend>> GetUserFriends(string userId)
+        {
+            string cacheKey = nameof(GetUserFriends) + userId;
+
+            if (_cache.TryGetValue(cacheKey, out List<UserFriend> cacheData))
+            {
+                return cacheData;
+            }
+
+            var friends = await _context.UserFriends.Where(e => e.FriendId == userId || e.UserId == userId).ToListAsync();
+
+            if (friends.Any())
+            {
+                var cacheEntryOptions = new MemoryCacheEntryOptions()
+                    .SetSlidingExpiration(TimeSpan.FromSeconds(10));
+
+                _cache.Set(cacheKey, friends, cacheEntryOptions);
+
+                return friends;
+            }
+
+            throw new NotFoundException(nameof(GetUserFriends), userId);
+
         }
 
         public bool CheckIfFriends(string requestUserId, string targetUserId)

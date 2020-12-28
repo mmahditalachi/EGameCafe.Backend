@@ -25,6 +25,7 @@ namespace Application.IntegrationTests.Groups.Commands
         [Test]
         public async Task ShouldCreateGroupAndReturnSucceeded()
         {
+            var userId = await RunAsDefaultUserAsync();
             var game = new Game { GameId = Guid.NewGuid().ToString(), GameName = "test" };
 
             await AddAsync(game);
@@ -34,6 +35,7 @@ namespace Application.IntegrationTests.Groups.Commands
                 GroupName = "gptest",
                 GroupType = GroupType.privateGroup,
                 GameId = game.GameId,
+                CreatorId = userId
             };
 
             var result = await SendAsync(command);
@@ -56,6 +58,7 @@ namespace Application.IntegrationTests.Groups.Commands
                 GroupName = "gptest", 
                 GroupType = GroupType.privateGroup,
                 GameId = game.GameId,
+                CreatorId = userId
             };
 
             var result = await SendAsync(command);

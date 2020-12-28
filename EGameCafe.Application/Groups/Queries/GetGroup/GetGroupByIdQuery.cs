@@ -13,7 +13,7 @@ using System.Threading.Tasks;
 
 namespace EGameCafe.Application.Groups.Queries.GetGroup
 {
-    public class GetGroupByIdQuery : IRequest<GetGroupByIdDto>
+    public class GetGroupByIdQuery : IRequest<GetGroupByIdVm>
     {
         public string GroupId { get; set; }
 
@@ -23,7 +23,7 @@ namespace EGameCafe.Application.Groups.Queries.GetGroup
         }
     }
 
-    public class Handler : IRequestHandler<GetGroupByIdQuery, GetGroupByIdDto>
+    public class Handler : IRequestHandler<GetGroupByIdQuery, GetGroupByIdVm>
     {
         private readonly IApplicationDbContext _context;
         private readonly IMemoryCache _cache;
@@ -39,35 +39,40 @@ namespace EGameCafe.Application.Groups.Queries.GetGroup
             _linkGenerator = linkGenerator;
         }
 
-        public async Task<GetGroupByIdDto> Handle(GetGroupByIdQuery request, CancellationToken cancellationToken)
+        public async Task<GetGroupByIdVm> Handle(GetGroupByIdQuery request, CancellationToken cancellationToken)
         {
-            var entity = new GetGroupByIdDto();
-
             string cacheKey = request.GroupId + "GetGroupByIdQuery";
 
-            if (_cache.TryGetValue(cacheKey, out entity))
+            if (_cache.TryGetValue(cacheKey, out GetGroupByIdVm cacheData))
             {
-                return entity;
+                return cacheData;
             }
 
-            entity = await _context.Group
+            var vm = new GetGroupByIdVm();
+
+            vm.GroupInfo = await _context.Group
                    .Include(e => e.Game)
-                   .Include(e=>e.GroupMembers)
                    .Where(e => e.GroupId == request.GroupId)
-                   .ProjectTo<GetGroupByIdDto>(_mapper.ConfigurationProvider)
+                   .ProjectTo<GetGroupByIdInfoDto>(_mapper.ConfigurationProvider)
                    .FirstOrDefaultAsync();
+
+            vm.GroupMembers = await _context.GroupMember
+                    .Where(e => e.GroupId == request.GroupId)
+                    .ProjectTo<GetGroupByIdGroupMemberDto>(_mapper.ConfigurationProvider)
+                    .ToListAsync();
+                    
 
             //entity.SharingLink = _linkGenerator
             //       .GetUriByAction(_currentUser.HttpContext, "ResetPassword", "Auth", new { userId = user.Id, token = token });
 
-            if (entity != null)
+            if (vm != null)
             {
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromSeconds(10));
 
-                _cache.Set(cacheKey, entity, cacheEntryOptions);
+                _cache.Set(cacheKey, vm, cacheEntryOptions);
 
-                return entity;
+                return vm;
             }
 
             throw new NotFoundException(nameof(GetGroupByIdQuery), request.GroupId);

@@ -57,6 +57,15 @@ namespace EGameCafe.Application.Dashboard.Queries.GetUserDashboardInfo
             vm.PersonalInfo = await _context.UserDetails
                 .Where(e => e.UserId == request.UserId).ProjectTo<GetUserDashboardPersonalDto>(_mapper.ConfigurationProvider).FirstOrDefaultAsync();
 
+            vm.Friends = _context.UserFriends
+                .Include(e=>e.Friend)
+                .Include(e=>e.User)
+                .Where(e => e.UserId == request.UserId || e.FriendId == request.UserId)
+                .Select(e=> e.FriendId == request.UserId 
+                    ? new GetUserDashboardFriendsDto { FriendId = e.UserId, FriendUsername = e.User.Username} 
+                    : new GetUserDashboardFriendsDto { FriendId = e.FriendId,FriendUsername = e.Friend.Username})
+                .ToList();
+
             if (vm.GameList.Any())
             {
                 var cacheEntryOptions = new MemoryCacheEntryOptions()

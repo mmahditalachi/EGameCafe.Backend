@@ -7,6 +7,8 @@ namespace EGameCafe.Application.Dashboard.Queries.GetUserDashboardInfo
 {
     public class GetUserDashboardSystemDto : IMapFrom<GetUserDashboardSystemDto>
     {
+        public string UserSystemInfoId { get; set; }
+
         public SystemManufacturer RamManufacturer { get; set; }
         public int TotalRam { get; set; }
         public SystemManufacturer GraphicCardManufacturer { get; set; }

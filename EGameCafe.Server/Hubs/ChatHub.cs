@@ -18,9 +18,9 @@ namespace EGameCafe.Server.Hubs
             await Clients.All.SendAsync("ReceiveMessage", user, message);
         }
 
-        public Task SendMessageToGroup(string groupId, string currentUserId, string message)
+        public Task SendMessageToGroup(string groupId, string currentUserId, string message, string username)
         {
-            return Clients.Group(groupId).SendAsync("Send", currentUserId, message);
+            return Clients.Group(groupId).SendAsync("Send", currentUserId, message, username);
         }
 
         public async Task AddToGroup(string groupName)
@@ -41,9 +41,6 @@ namespace EGameCafe.Server.Hubs
         {
             return Clients.User(user).SendAsync("ReceiveMessage", message);
         }
-
-
-
 
     }
 }

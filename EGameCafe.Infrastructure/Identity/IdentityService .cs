@@ -368,6 +368,7 @@ namespace EGameCafe.Infrastructure.Identity
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id),
                 new Claim(JwtRegisteredClaimNames.FamilyName, user.FullName()),
                 new Claim("id", user.Id),
+                new Claim("username", user.UserName),
             };
 
 

@@ -2,8 +2,6 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using System.Threading.Tasks;
-using EGameCafe.Application.Games.Queries.GetAllGames;
-using EGameCafe.Application.Games.Queries.GetUserGamesById;
 using EGameCafe.Application.Dashboard.Queries.GetUserDashboardInfo;
 
 namespace EGameCafe.Server.Controllers
@@ -22,7 +20,7 @@ namespace EGameCafe.Server.Controllers
         }
 
         [HttpGet("[action]")]
-        //[Authorize]
+        [Authorize]
         public async Task<IActionResult> GetUserDashboard(string userId)
         {
             var query = new GetUserDashboardInfoQuery(userId);

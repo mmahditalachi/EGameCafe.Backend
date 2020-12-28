@@ -2,6 +2,7 @@
 using EGameCafe.Application.Groups.Commands.CreateGroup;
 using EGameCafe.Application.Groups.Commands.Removegroup;
 using EGameCafe.Application.Groups.Queries.GetAllGroups;
+using EGameCafe.Application.Groups.Queries.GetAllUserGroups;
 using EGameCafe.Application.Groups.Queries.GetGroup;
 using EGameCafe.Application.Groups.Queries.SendInvitation;
 using MediatR;
@@ -45,6 +46,15 @@ namespace EGameCafe.Server.Controllers
         public async Task<IActionResult> GetAllGroups(int from, int count, string sortType)
         {
             var query = new GetAllGroupsQuery(from,count,sortType);
+            var result = await _mediator.Send(query);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
+        }
+
+        [HttpGet("GetAllUserGroups/{userId}")]
+        //[Authorize]
+        public async Task<IActionResult> GetAllUserGroups(string userId)
+        {
+            var query = new GetAllUserGroupsQuery(userId);
             var result = await _mediator.Send(query);
             return result != null ? (IActionResult)Ok(result) : NotFound();
         }

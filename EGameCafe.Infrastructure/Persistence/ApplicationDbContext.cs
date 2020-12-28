@@ -39,6 +39,7 @@ namespace EGameCafe.Infrastructure.Persistence
         public DbSet<UserSystemInfo> UserSystemInfo { get; set; }
         public DbSet<FriendRequest> FriendRequest { get; set; }
         public DbSet<UserFriend> UserFriends { get; set; }
+        public DbSet<ActivityVote> ActivityVotes { get; set; }
 
 
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
@@ -125,7 +126,15 @@ namespace EGameCafe.Infrastructure.Persistence
                         .WithOne(s => s.UserDetail)
                         .HasForeignKey<UserSystemInfo>(e=>e.UserId);
 
+            //many to many Activity and userDetail
 
+            builder.Entity<ActivityVote>()
+                        .HasOne<UserDetail>(e => e.UserDetail)
+                        .WithMany(p => p.ActivityVotes);
+
+            builder.Entity<ActivityVote>()
+                        .HasOne<Activity>(e => e.Activity)
+                        .WithMany(p => p.ActivityVotes);
 
             base.OnModelCreating(builder);
         }

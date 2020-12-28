@@ -44,14 +44,17 @@ namespace EGameCafe.Server
             //    .AddDbContextCheck<ApplicationDbContext>();
 
 
-            services.AddApiVersioning(o=>{
+            services.AddApiVersioning(o =>
+            {
                 o.AssumeDefaultVersionWhenUnspecified = true;
                 o.DefaultApiVersion = new ApiVersion(1, 0);
             });
 
-            services.AddControllersWithViews(options =>
-                options.Filters.Add(new ApiExceptionFilter()))
-                    .AddFluentValidation();
+            services.AddControllersWithViews(options =>options.Filters.Add(new ApiExceptionFilter()))
+                    .AddFluentValidation()
+                    .AddNewtonsoftJson(options =>
+                            options.SerializerSettings.ReferenceLoopHandling = Newtonsoft.Json.ReferenceLoopHandling.Ignore
+                    );
 
             services.AddRazorPages();
 
@@ -64,11 +67,11 @@ namespace EGameCafe.Server
 
             services.AddSwaggerGen(x =>
             {
-                x.SwaggerDoc("v1", new OpenApiInfo 
-                { 
+                x.SwaggerDoc("v1", new OpenApiInfo
+                {
                     Title = "EGameCafe API",
                     Version = "v1",
-                    Description= "API V1 description"
+                    Description = "API V1 description"
                 });
 
                 x.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
@@ -91,7 +94,7 @@ namespace EGameCafe.Server
                     }}, new List<string>()}
                 });
 
-                x.ResolveConflictingActions(a=>a.First());
+                x.ResolveConflictingActions(a => a.First());
                 x.OperationFilter<RemoveVersionFromParameter>();
                 x.DocumentFilter<ReplaceVersionWithExactValueInPath>();
 
@@ -129,8 +132,8 @@ namespace EGameCafe.Server
             var swaggerOptions = new SwaggerOption();
             Configuration.GetSection(nameof(SwaggerOption)).Bind(swaggerOptions);
 
-            app.UseSwagger(option => 
-            { 
+            app.UseSwagger(option =>
+            {
                 option.RouteTemplate = swaggerOptions.JsonRoute;
             });
             app.UseSwaggerUI(option =>

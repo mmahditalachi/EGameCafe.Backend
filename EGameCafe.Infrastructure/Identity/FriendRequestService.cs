@@ -1,12 +1,13 @@
-﻿using EGameCafe.Application.Common.Interfaces;
+﻿using EGameCafe.Application.Common.Exceptions;
+using EGameCafe.Application.Common.Interfaces;
 using EGameCafe.Application.Common.Models;
 using EGameCafe.Application.Models.FriendRequest;
 using EGameCafe.Domain.Entities;
 using EGameCafe.Domain.Enums;
 using EGameCafe.Infrastructure.Services;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 
@@ -92,6 +93,19 @@ namespace EGameCafe.Infrastructure.Identity
             }
 
             return Result.Failure("User Not Found", "User Not Found");
+        }
+
+        public async Task<List<GetAllFriendRequestDto>> GetAllFriendRequest(string userId)
+        {
+            if(await _userService.UserExists(userId))
+            {
+                 return await _context.FriendRequest
+                    .Where(e => e.ReceiverId == userId && e.FriendRequestStatus == FriendRequestStatus.Pending)
+                    .Select(e=> new GetAllFriendRequestDto { Id = e.Id,  Fullname = e.Sender.Fullname, Username = e.Sender.Username, UserId = e.Sender.UserId, ProfileImage = e.Sender.ProfileImage })
+                    .ToListAsync();
+            }
+
+            throw new NotFoundException(nameof(GetAllFriendRequest));
         }
 
         public async Task<Result> Remove(RemoveFriendRequestModel model)

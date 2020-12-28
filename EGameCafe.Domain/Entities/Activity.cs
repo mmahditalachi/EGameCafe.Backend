@@ -12,5 +12,6 @@ namespace EGameCafe.Domain.Entities
         public string UserId { get; set; }
         public UserDetail UserDetail { get; set; }
 
+        public List<ActivityVote> ActivityVotes { get; set; }
     }
 }

@@ -14,10 +14,12 @@ namespace EGameCafe.Application.Dashboard.Queries.GetUserDashboardInfo
             ActivityList = new List<GetUserDashboardActivityDto>();
             SystemInfo = new GetUserDashboardSystemDto();
             PersonalInfo = new GetUserDashboardPersonalDto();
+            Friends = new List<GetUserDashboardFriendsDto>();
         }
 
         public IList<GetUserDashboardGameDto> GameList { get; set; }
         public IList<GetUserDashboardActivityDto> ActivityList { get; set; }
+        public IList<GetUserDashboardFriendsDto> Friends { get; set; }
         public GetUserDashboardSystemDto SystemInfo { get; set; }
         public GetUserDashboardPersonalDto PersonalInfo { get; set; }
         public string UserId { get; set; }
