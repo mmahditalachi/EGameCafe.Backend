@@ -3,7 +3,6 @@ using EGameCafe.Application.Common.Mappings;
 using EGameCafe.Domain.Entities;
 using EGameCafe.Domain.Enums;
 
-
 namespace EGameCafe.Application.Groups.Queries.GetAllGroups
 {
     public class GetAllGroupsDto : IMapFrom<GetAllGroupsDto>

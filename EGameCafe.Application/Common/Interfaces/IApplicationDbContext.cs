@@ -16,6 +16,12 @@ namespace EGameCafe.Application.Common.Interfaces
         DbSet<GameGenre> GameGenres { get; set; }
         DbSet<UserDetail> UserDetails { get; set; }
         DbSet<UserGame> UserGames { get; set; }
+        DbSet<Activity> Activity { get; set; }
+        DbSet<UserSystemInfo> UserSystemInfo { get; set; }
+        DbSet<FriendRequest> FriendRequest { get; set; }
+        DbSet<UserFriend> UserFriends { get; set; }
+
+
         Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
     }
 }

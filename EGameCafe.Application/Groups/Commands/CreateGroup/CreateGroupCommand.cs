@@ -6,7 +6,6 @@ using EGameCafe.Domain.Enums;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
@@ -17,6 +16,7 @@ namespace EGameCafe.Application.Groups.Commands.CreateGroup
         public string GroupName { get; set; }
         public GroupType GroupType { get; set; }
         public string GameId { get; set; }
+        public string CreatorId { get; set; }
     }
 
     public class Handler : IRequestHandler<CreateGroupCommand, Result>
@@ -54,6 +54,10 @@ namespace EGameCafe.Application.Groups.Commands.CreateGroup
                 entry.GroupId = Guid.NewGuid().ToString();
 
                 _context.Group.Add(entry);
+
+                var member = new GroupMember { GroupMemberId = Guid.NewGuid().ToString() , GroupId = entry.GroupId, UserId = request.CreatorId };
+
+                _context.GroupMember.Add(member);
 
                 await _context.SaveChangesAsync(cancellationToken);
 

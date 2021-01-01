@@ -32,9 +32,16 @@ namespace EGameCafe.Infrastructure.Persistence
         public DbSet<Group> Group { get; set; }
         public DbSet<Game> Game { get; set; }
         public DbSet<Genre> Genre { get; set; }
+        public DbSet<Activity> Activity { get; set; }
         public DbSet<GameGenre> GameGenres { get; set; }
         public DbSet<UserDetail> UserDetails { get; set; }
         public DbSet<UserGame> UserGames { get; set; }
+        public DbSet<UserSystemInfo> UserSystemInfo { get; set; }
+        public DbSet<FriendRequest> FriendRequest { get; set; }
+        public DbSet<UserFriend> UserFriends { get; set; }
+        public DbSet<ActivityVote> ActivityVotes { get; set; }
+
+
         public override async Task<int> SaveChangesAsync(CancellationToken cancellationToken = new CancellationToken())
         {
             foreach (Microsoft.EntityFrameworkCore.ChangeTracking.EntityEntry<AuditableEntity> entry in ChangeTracker.Entries<AuditableEntity>())
@@ -97,6 +104,37 @@ namespace EGameCafe.Infrastructure.Persistence
                         .HasOne<Game>(e => e.Game)
                         .WithMany(d => d.Groups)
                         .HasForeignKey(e => e.GameId);
+
+            // one to many GroupMember and UserDetail
+
+            builder.Entity<GroupMember>()
+                        .HasOne<UserDetail>(e => e.UserDetail)
+                        .WithMany(d => d.GroupMembers)
+                        .HasForeignKey(e => e.UserId);
+
+            // one to many Activity and UserDetail
+
+            builder.Entity<Activity>()
+                        .HasOne<UserDetail>(e => e.UserDetail)
+                        .WithMany(d => d.Activities)
+                        .HasForeignKey(e => e.UserId);
+
+            // one to one UserSystemInfo and UserDetail
+
+            builder.Entity<UserDetail>()
+                        .HasOne<UserSystemInfo>(p => p.UserSystemInfo)
+                        .WithOne(s => s.UserDetail)
+                        .HasForeignKey<UserSystemInfo>(e=>e.UserId);
+
+            //many to many Activity and userDetail
+
+            builder.Entity<ActivityVote>()
+                        .HasOne<UserDetail>(e => e.UserDetail)
+                        .WithMany(p => p.ActivityVotes);
+
+            builder.Entity<ActivityVote>()
+                        .HasOne<Activity>(e => e.Activity)
+                        .WithMany(p => p.ActivityVotes);
 
             base.OnModelCreating(builder);
         }

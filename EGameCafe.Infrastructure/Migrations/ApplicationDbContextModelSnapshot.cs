@@ -19,6 +19,100 @@ namespace EGameCafe.Infrastructure.Migrations
                 .HasAnnotation("Relational:MaxIdentifierLength", 128)
                 .HasAnnotation("SqlServer:ValueGenerationStrategy", SqlServerValueGenerationStrategy.IdentityColumn);
 
+            modelBuilder.Entity("EGameCafe.Domain.Entities.Activity", b =>
+                {
+                    b.Property<string>("ActivityId")
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<string>("ActivityText")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(150)")
+                        .HasMaxLength(150);
+
+                    b.Property<string>("ActivityTitle")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasKey("ActivityId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("Activity");
+                });
+
+            modelBuilder.Entity("EGameCafe.Domain.Entities.ActivityVote", b =>
+                {
+                    b.Property<string>("ActivityId")
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("ActivityVoteId")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<bool>("Like")
+                        .HasColumnType("bit");
+
+                    b.HasKey("ActivityId", "UserId", "ActivityVoteId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("ActivityVotes");
+                });
+
+            modelBuilder.Entity("EGameCafe.Domain.Entities.FriendRequest", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<int>("FriendRequestStatus")
+                        .HasColumnType("int");
+
+                    b.Property<string>("ReceiverId")
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("SenderId")
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("ReceiverId");
+
+                    b.HasIndex("SenderId");
+
+                    b.ToTable("FriendRequest");
+                });
+
             modelBuilder.Entity("EGameCafe.Domain.Entities.Game", b =>
                 {
                     b.Property<string>("GameId")
@@ -176,11 +270,13 @@ namespace EGameCafe.Infrastructure.Migrations
 
                     b.Property<string>("UserId")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasColumnType("nvarchar(64)");
 
                     b.HasKey("GroupMemberId");
 
                     b.HasIndex("GroupId");
+
+                    b.HasIndex("UserId");
 
                     b.ToTable("GroupMember");
                 });
@@ -257,15 +353,44 @@ namespace EGameCafe.Infrastructure.Migrations
                     b.Property<string>("CreatedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Fullname")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("LastModified")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("LastModifiedBy")
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("ProfileImage")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("nvarchar(max)");
+
                     b.HasKey("UserId");
 
                     b.ToTable("UserDetails");
+                });
+
+            modelBuilder.Entity("EGameCafe.Domain.Entities.UserFriend", b =>
+                {
+                    b.Property<string>("Id")
+                        .HasColumnType("nvarchar(450)");
+
+                    b.Property<string>("FriendId")
+                        .HasColumnType("nvarchar(64)");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasKey("Id");
+
+                    b.HasIndex("FriendId");
+
+                    b.HasIndex("UserId");
+
+                    b.ToTable("UserFriends");
                 });
 
             modelBuilder.Entity("EGameCafe.Domain.Entities.UserGame", b =>
@@ -301,6 +426,70 @@ namespace EGameCafe.Infrastructure.Migrations
                     b.HasIndex("UserId");
 
                     b.ToTable("UserGames");
+                });
+
+            modelBuilder.Entity("EGameCafe.Domain.Entities.UserSystemInfo", b =>
+                {
+                    b.Property<string>("UserSystemInfoId")
+                        .HasColumnType("nvarchar(64)")
+                        .HasMaxLength(64);
+
+                    b.Property<int>("CaseManufacturer")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CaseName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("CpuManufacturer")
+                        .HasColumnType("int");
+
+                    b.Property<string>("CpuName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime>("Created")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("CreatedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("GraphicCardManufacturer")
+                        .HasColumnType("int");
+
+                    b.Property<string>("GraphicCardName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<DateTime?>("LastModified")
+                        .HasColumnType("datetime2");
+
+                    b.Property<string>("LastModifiedBy")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<int>("PowerManufacturer")
+                        .HasColumnType("int");
+
+                    b.Property<string>("PowerName")
+                        .HasColumnType("nvarchar(50)")
+                        .HasMaxLength(50);
+
+                    b.Property<int>("RamManufacturer")
+                        .HasColumnType("int");
+
+                    b.Property<int>("TotalRam")
+                        .HasColumnType("int");
+
+                    b.Property<string>("UserId")
+                        .HasColumnType("nvarchar(64)");
+
+                    b.HasKey("UserSystemInfoId");
+
+                    b.HasIndex("UserId")
+                        .IsUnique()
+                        .HasFilter("[UserId] IS NOT NULL");
+
+                    b.ToTable("UserSystemInfo");
                 });
 
             modelBuilder.Entity("EGameCafe.Infrastructure.Identity.ApplicationUser", b =>
@@ -518,6 +707,39 @@ namespace EGameCafe.Infrastructure.Migrations
                     b.ToTable("AspNetUserTokens");
                 });
 
+            modelBuilder.Entity("EGameCafe.Domain.Entities.Activity", b =>
+                {
+                    b.HasOne("EGameCafe.Domain.Entities.UserDetail", "UserDetail")
+                        .WithMany("Activities")
+                        .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("EGameCafe.Domain.Entities.ActivityVote", b =>
+                {
+                    b.HasOne("EGameCafe.Domain.Entities.Activity", "Activity")
+                        .WithMany("ActivityVotes")
+                        .HasForeignKey("ActivityId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("EGameCafe.Domain.Entities.UserDetail", "UserDetail")
+                        .WithMany("ActivityVotes")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EGameCafe.Domain.Entities.FriendRequest", b =>
+                {
+                    b.HasOne("EGameCafe.Domain.Entities.UserDetail", "Receiver")
+                        .WithMany()
+                        .HasForeignKey("ReceiverId");
+
+                    b.HasOne("EGameCafe.Domain.Entities.UserDetail", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId");
+                });
+
             modelBuilder.Entity("EGameCafe.Domain.Entities.GameGenre", b =>
                 {
                     b.HasOne("EGameCafe.Domain.Entities.Game", "Game")
@@ -540,7 +762,25 @@ namespace EGameCafe.Infrastructure.Migrations
                 {
                     b.HasOne("EGameCafe.Domain.Entities.Group", "Group")
                         .WithMany("GroupMembers")
-                        .HasForeignKey("GroupId");
+                        .HasForeignKey("GroupId")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("EGameCafe.Domain.Entities.UserDetail", "UserDetail")
+                        .WithMany("GroupMembers")
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("EGameCafe.Domain.Entities.UserFriend", b =>
+                {
+                    b.HasOne("EGameCafe.Domain.Entities.UserDetail", "Friend")
+                        .WithMany()
+                        .HasForeignKey("FriendId");
+
+                    b.HasOne("EGameCafe.Domain.Entities.UserDetail", "User")
+                        .WithMany()
+                        .HasForeignKey("UserId");
                 });
 
             modelBuilder.Entity("EGameCafe.Domain.Entities.UserGame", b =>
@@ -552,6 +792,13 @@ namespace EGameCafe.Infrastructure.Migrations
                     b.HasOne("EGameCafe.Domain.Entities.UserDetail", "UserDetail")
                         .WithMany("UserGames")
                         .HasForeignKey("UserId");
+                });
+
+            modelBuilder.Entity("EGameCafe.Domain.Entities.UserSystemInfo", b =>
+                {
+                    b.HasOne("EGameCafe.Domain.Entities.UserDetail", "UserDetail")
+                        .WithOne("UserSystemInfo")
+                        .HasForeignKey("EGameCafe.Domain.Entities.UserSystemInfo", "UserId");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<string>", b =>

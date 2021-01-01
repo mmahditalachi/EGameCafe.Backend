@@ -3,16 +3,16 @@ using EGameCafe.Application.Common.Interfaces;
 using EGameCafe.Domain.Entities;
 using EGameCafe.Domain.Enums;
 using MediatR;
+using Microsoft.AspNetCore.Routing;
 using Microsoft.EntityFrameworkCore;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace EGameCafe.Application.GroupMembers.Queries.SendInvitation
+namespace EGameCafe.Application.Groups.Queries.SendInvitation
 {
     public class SendInvitationQuery : IRequest<string>
     {
-        public string UserId { get; set; }
         public string GroupId { get; set; }
     }
 

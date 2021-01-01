@@ -1,4 +1,6 @@
 ﻿using EGameCafe.Application.Common.Interfaces;
+using EGameCafe.Domain.Entities;
+using EGameCafe.Domain.Enums;
 using EGameCafe.Infrastructure.Identity;
 using EGameCafe.Infrastructure.Persistence;
 using EGameCafe.Server;
@@ -103,12 +105,10 @@ namespace Application.IntegrationTests
 
             var result = await userManager.CreateAsync(user, password);
 
-            var token = await userManager.GenerateEmailConfirmationTokenAsync(user);
-
-            await userManager.ConfirmEmailAsync(user, token);
-
             if (result.Succeeded)
             {
+                await AddUserDetail(user.Id);
+
                 _currentUserId = user.Id;
 
                 return _currentUserId;
@@ -117,6 +117,37 @@ namespace Application.IntegrationTests
             var errors = string.Join(Environment.NewLine, result.ToApplicationResult());
 
             throw new Exception($"Unable to create {userName}.{Environment.NewLine}{errors}");
+        }
+
+        public static async Task AddUserDetail(string userId)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+
+            var userDetail = new UserDetail { UserId = userId,  };
+
+            await context.UserDetails.AddAsync(userDetail);
+
+            await context.SaveChangesAsync();
+        }
+
+        public static async Task CreateRandomGroup(GroupType groupType)
+        {
+            using var scope = _scopeFactory.CreateScope();
+
+            var context = scope.ServiceProvider.GetService<ApplicationDbContext>();
+
+            var group = new Group { 
+                GroupId = Guid.NewGuid().ToString(),
+                GroupName = GenerateRandomString(5),
+                SharingLink = await GenerateSHA1Hash(),
+                GroupType = groupType
+            };
+
+            await context.Group.AddAsync(group);
+
+            await context.SaveChangesAsync();
         }
 
         public static async Task<string> GenerateSHA1Hash()

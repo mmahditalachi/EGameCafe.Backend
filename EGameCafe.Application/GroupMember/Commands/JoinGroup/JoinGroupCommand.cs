@@ -19,21 +19,18 @@ namespace EGameCafe.Application.GroupMembers.Commands.JoinGroup
     public class Handler : IRequestHandler<JoinGroupCommand, Result>
     {
         private readonly IApplicationDbContext _context;
-        private readonly IIdGenerator _idGenerator;
-        private readonly IDateTime _dateTime;
 
-        public Handler(IApplicationDbContext context, IIdGenerator idGenerator, IDateTime dateTime)
+        public Handler(IApplicationDbContext context)
         {
             _context = context;
-            _idGenerator = idGenerator;
-            _dateTime = dateTime;
+
         }
 
         public async Task<Result> Handle(JoinGroupCommand request, CancellationToken cancellationToken)
         {
             try
             {
-                if(_context.GroupMember.Any())
+                if(_context.GroupMember.Where(e=>e.GroupId == request.GroupId && e.UserId == request.UserId).Any())
                 {
                     throw new DuplicateUserException($"DuplicateUser : {request.UserId} groupId : {request.GroupId}");
                 }

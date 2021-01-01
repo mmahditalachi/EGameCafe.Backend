@@ -34,16 +34,17 @@ namespace EGameCafe.Application.GroupMembers.Commands.JoinViaInvitation
 
         public async Task<Result> Handle(JoinViaInvitationCommand request, CancellationToken cancellationToken)
         {
-            if (_context.GroupMember.Any())
-            {
-                throw new DuplicateUserException($"DuplicateUser : {request.UserId}");
-            }
 
             var entry = await _context.Group.FirstOrDefaultAsync(e => e.SharingLink == request.token);
 
             if (entry == null)
             {
                 throw new NotFoundException("group not found");
+            }
+
+            if (_context.GroupMember.Any(e=>e.UserId == request.UserId && e.GroupId == entry.GroupId))
+            {
+                throw new DuplicateUserException($"DuplicateUser : {request.UserId}");
             }
 
             string id = Guid.NewGuid().ToString();

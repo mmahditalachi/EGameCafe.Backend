@@ -2,7 +2,9 @@
 using EGameCafe.Application.Groups.Commands.CreateGroup;
 using EGameCafe.Application.Groups.Commands.Removegroup;
 using EGameCafe.Application.Groups.Queries.GetAllGroups;
+using EGameCafe.Application.Groups.Queries.GetAllUserGroups;
 using EGameCafe.Application.Groups.Queries.GetGroup;
+using EGameCafe.Application.Groups.Queries.SendInvitation;
 using MediatR;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -48,6 +50,15 @@ namespace EGameCafe.Server.Controllers
             return result != null ? (IActionResult)Ok(result) : NotFound();
         }
 
+        [HttpGet("GetAllUserGroups/{userId}")]
+        //[Authorize]
+        public async Task<IActionResult> GetAllUserGroups(string userId)
+        {
+            var query = new GetAllUserGroupsQuery(userId);
+            var result = await _mediator.Send(query);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
+        }
+
         [HttpDelete("RemoveGroup/{groupId}")]
         [Authorize]
         public async Task<IActionResult> RemoveGroup(string groupId)
@@ -55,6 +66,15 @@ namespace EGameCafe.Server.Controllers
             var command = new RemoveGroupCommand { GroupId = groupId };
             var result = await _mediator.Send(command);
             return result != null ? (IActionResult)Ok(result) : BadRequest(result);
+        }
+
+        [HttpGet("GetGroupLink/{userId}/{groupId}")]
+        [Authorize]
+        public async Task<IActionResult> GetGroupLink(string userId, string groupId)
+        {
+            var command = new SendInvitationQuery { GroupId = groupId };
+            var result = await _mediator.Send(command);
+            return result != null ? (IActionResult)Ok(Url.Action("JoinViaGroupInvitation", "GroupMember", new { userId = userId , token = result,}, Request.Scheme)) : BadRequest();
         }
     }
 }

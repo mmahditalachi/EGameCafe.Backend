@@ -95,7 +95,7 @@ namespace EGameCafe.Infrastructure.Identity
 
                 if (!result.Succeeded) return result.ToApplicationResult();
 
-                var userDetail = new UserDetail { UserId = user.Id };
+                var userDetail = new UserDetail { UserId = user.Id, Username = user.UserName, Fullname = user.FullName() };
 
                 _context.UserDetails.Add(userDetail);
 
@@ -367,6 +367,8 @@ namespace EGameCafe.Infrastructure.Identity
                 new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
                 new Claim(JwtRegisteredClaimNames.NameId, user.Id),
                 new Claim(JwtRegisteredClaimNames.FamilyName, user.FullName()),
+                new Claim("id", user.Id),
+                new Claim("username", user.UserName),
             };
 
 

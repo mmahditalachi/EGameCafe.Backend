@@ -37,9 +37,9 @@ namespace Application.IntegrationTests.Groups.Queries
 
             var result = await SendAsync(query);
 
-            result.GroupName.Should().Equals(item.GroupName);
-            result.GroupType.Should().Equals(item.GroupType);
-            result.GameName.Should().Equals(item.GroupType);
+            result.GroupInfo.GroupName.Should().Equals(item.GroupName);
+            result.GroupInfo.GroupType.Should().Equals(item.GroupType);
+            result.GroupInfo.GameName.Should().Equals(item.GroupType);
             
         }
 
@@ -65,10 +65,10 @@ namespace Application.IntegrationTests.Groups.Queries
 
             var result = await SendAsync(query);
 
-            result.GroupName.Should().Equals(item.GroupName);
-            result.GroupType.Should().Equals(item.GroupType);
+            result.GroupInfo.GroupName.Should().Equals(item.GroupName);
+            result.GroupInfo.GroupType.Should().Equals(item.GroupType);
 
-            result.GameName.Should().Equals(item.Game.GameName);
+            result.GroupInfo.GameName.Should().Equals(item.Game.GameName);
         }
     }
 }
