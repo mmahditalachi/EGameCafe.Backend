@@ -29,5 +29,13 @@ namespace EGameCafe.Server.Controllers
             var result = await _userService.GetUserFriends(userId);
             return result != null ? (IActionResult)Ok(result) : NotFound();
         }
+
+        [HttpGet("[action]")]
+        //[Authorize]
+        public async Task<IActionResult> GetUser(string username, string currentUserId)
+        {
+            var result = await _userService.GetUsers(username, currentUserId);
+            return result != null ? (IActionResult)Ok(result) : NotFound();
+        }
     }
 }

@@ -71,7 +71,7 @@ namespace EGameCafe.Infrastructure.Identity
                 return Result.Failure("user not found", "user not found");
             }
 
-            return Result.Failure("Request Not Found", "Request Not Found");
+            return Result.Failure("Request has been sended", "Request has been sended");
         }
 
         public async Task<Result> DeclineAsync(FriendRequestModel model)

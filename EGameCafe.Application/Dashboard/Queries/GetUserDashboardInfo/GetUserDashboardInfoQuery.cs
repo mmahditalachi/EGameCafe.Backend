@@ -34,6 +34,7 @@ namespace EGameCafe.Application.Dashboard.Queries.GetUserDashboardInfo
             _cache = cache;
             _mapper = mapper;
         }
+
         public async Task<GetUserDashboardInfoVm> Handle(GetUserDashboardInfoQuery request, CancellationToken cancellationToken)
         {
             string cacheKey = request.UserId + nameof(GetUserDashboardInfoQuery);
@@ -66,7 +67,7 @@ namespace EGameCafe.Application.Dashboard.Queries.GetUserDashboardInfo
                     : new GetUserDashboardFriendsDto { FriendId = e.FriendId,FriendUsername = e.Friend.Username})
                 .ToList();
 
-            if (vm.GameList.Any())
+            if (vm != null)
             {
                 var cacheEntryOptions = new MemoryCacheEntryOptions()
                     .SetSlidingExpiration(TimeSpan.FromSeconds(10));

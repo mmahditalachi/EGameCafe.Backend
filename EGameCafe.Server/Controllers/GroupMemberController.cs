@@ -49,9 +49,9 @@ namespace EGameCafe.Server.Controllers
         }
 
 
-        [HttpPost("JoinViaGroupInvitation/{token}/{userId}")]
+        [HttpPost("[action]")]
         [Authorize]
-        public async Task<IActionResult> JoinViaGroupInvitation([FromQuery]string token, string userId)
+        public async Task<IActionResult> JoinViaGroupInvitation([FromQuery(Name = "token")]string token, [FromQuery(Name ="userId")]string userId)
         {
             var command = new JoinViaInvitationCommand { token = token, UserId = userId };
             var result = await _mediator.Send(command);

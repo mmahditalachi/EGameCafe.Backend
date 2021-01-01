@@ -1,6 +1,7 @@
 ﻿using EGameCafe.Application.Common.Exceptions;
 using EGameCafe.Application.Common.Interfaces;
 using EGameCafe.Application.Common.Models;
+using EGameCafe.Application.Models.FriendRequest;
 using EGameCafe.Domain.Entities;
 using EGameCafe.Infrastructure.Services;
 using Microsoft.AspNetCore.Identity;
@@ -76,6 +77,29 @@ namespace EGameCafe.Infrastructure.Identity
         public bool CheckIfFriends(string requestUserId, string targetUserId)
         {
             return _context.UserFriends.Any(uf => (uf.UserId == requestUserId && uf.FriendId == targetUserId) || (uf.UserId == targetUserId && uf.FriendId == requestUserId));
+        }
+
+        public async Task<List<UserSearchModel>> GetUsers(string username, string currentUserId)
+        {
+            var users = await _context.UserDetails
+                .Where(e=>e.Username.ToLower().Contains(username.ToLower()))
+                .Take(5)
+                .Select(e=>new UserSearchModel { UserId = e.UserId, Username= e.Username })
+                .ToListAsync();
+
+            var currentuser = users.FirstOrDefault(e => e.UserId == currentUserId);
+
+            if(currentuser != null)
+            {
+                users.Remove(currentuser);
+            }
+
+            if(users != null)
+            {
+                return users;
+            }
+
+            return new List<UserSearchModel>();
         }
         
         public async Task<bool> UserExists(string userId) => await _userManager.FindByIdAsync(userId) != null ? true : false;
