@@ -45,9 +45,9 @@ You can test authentican and other feature with sample users that creats in star
         "password": "password"
     },
     {
-        "Id": "cc011c60-fc7f-4dd2-906e-f89b23796831"
+        "Id": "cc011c60-fc7f-4dd2-906e-f89b23796831",
         "UserName" : "User_Test_2",
-        "PhoneNumber" : "0933333333",
+        "PhoneNumber" : "09354891892",
         "password": "password"
     }
 ```
